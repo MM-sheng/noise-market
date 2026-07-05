@@ -7,6 +7,10 @@ const corsHeaders = {
   'access-control-allow-headers': 'content-type',
 };
 
+function cleanText(value, max) {
+  return String(value || '').replace(/[<>&]/g, '').trim().slice(0, max);
+}
+
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
@@ -23,9 +27,9 @@ function cleanList(value) {
   return value
     .filter((row) => row && Number.isFinite(Number(row.ret)))
     .map((row) => ({
-      name: String(row.name || 'anon').replace(/[<>&]/g, '').slice(0, 16),
+      name: cleanText(row.name || 'anon', 16) || 'anon',
       ret: Number(row.ret),
-      seed: String(row.seed || '').slice(0, 32),
+      seed: cleanText(row.seed || '', 32),
       rank: Number.parseInt(row.rank, 10) || 1,
       ts: Number.parseInt(row.ts, 10) || Date.now(),
     }))
@@ -49,6 +53,25 @@ function cleanEntry(value) {
   return { ...entry, ts: Date.now() };
 }
 
+function scoreKey(row) {
+  return [
+    row.name.toLowerCase(),
+    row.seed,
+    row.rank,
+    Math.round(row.ret * 10000),
+  ].join(':');
+}
+
+function mergePlayers(entry, players) {
+  const byKey = new Map();
+  for (const row of cleanList([entry, ...players])) {
+    const key = scoreKey(row);
+    const prev = byKey.get(key);
+    if (!prev || row.ts < prev.ts) byKey.set(key, row);
+  }
+  return cleanList([...byKey.values()]);
+}
+
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') {
@@ -65,6 +88,9 @@ export default {
     }
 
     if (request.method === 'POST') {
+      const size = Number(request.headers.get('content-length') || 0);
+      if (size > 2048) return json({ error: 'payload too large' }, 413);
+
       let body;
       try {
         body = await request.json();
@@ -75,7 +101,7 @@ export default {
       const entry = cleanEntry(body);
       if (!entry) return json({ error: 'invalid leaderboard entry' }, 400);
 
-      const players = cleanList([entry, ...(await readPlayers(env))]);
+      const players = mergePlayers(entry, await readPlayers(env));
       await env.LEADERBOARD.put(KEY, JSON.stringify(players));
       return json({ players }, 201);
     }

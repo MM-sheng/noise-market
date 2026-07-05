@@ -70,6 +70,7 @@
   .transport{display:flex; align-items:center; gap:14px; padding:11px 14px}
   .primary{flex:1; font-family:var(--disp); font-weight:700; font-size:14px; letter-spacing:.04em; padding:13px 0; border-radius:8px; border:1px solid var(--hair2); background:var(--panel2); color:var(--signal); cursor:pointer; text-transform:uppercase; transition:filter .12s}
   .primary:hover{filter:brightness(1.15)}
+  .primary:disabled{opacity:.45; cursor:wait; filter:none; box-shadow:none}
   .primary.go{background:var(--sig-dim); border-color:var(--signal); box-shadow:0 0 22px -8px var(--signal)}
   .speedbox{display:flex; align-items:center; gap:9px; font-family:var(--mono); font-size:9px; letter-spacing:.1em; color:var(--muted); text-transform:uppercase}
   .speedbox .sv{color:var(--ink); width:16px; text-align:right}
@@ -173,7 +174,7 @@
       <span class="sub">zero-drift · race the bots</span>
     </div>
     <div class="config">
-      <div class="field"><label>Seed</label><input id="cfgSeed" value="1337"></div>
+      <div class="field"><label>Seed</label><input id="cfgSeed" value="1337" maxlength="32"></div>
       <div class="field"><label>Vol%</label><input id="cfgSigma" value="1.0"></div>
       <div class="field"><label>Cost bp</label><input id="cfgCost" value="2"></div>
       <div class="field"><label>Ticks</label><input id="cfgLen" value="120"></div>
@@ -201,7 +202,7 @@
       </div>
 
       <div class="panel transport">
-        <button class="primary go" id="bPrimary">▶ Start 开始</button>
+        <button class="primary go" id="bPrimary" disabled>▶ Start 开始</button>
         <div class="speedbox"><span>Speed</span><input type="range" id="tSpeed" min="1" max="10" value="3"><span class="sv" id="svVal">3</span></div>
       </div>
     </div>
@@ -268,6 +269,8 @@
   const $=id=>document.getElementById(id);
   const cssCache={};
   const css=v=>cssCache[v]||(cssCache[v]=getComputedStyle(document.documentElement).getPropertyValue(v).trim());
+  const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const cleanText=(v,n)=>String(v||'').replace(/[<>&]/g,'').trim().slice(0,n);
 
   // ---------- layered storage: Worker leaderboard -> Claude shared storage -> localStorage -> memory ----------
   const LEADERBOARD_API = 'https://noise-market-leaderboard.mm-sheng.workers.dev'.trim().replace(/\/+$/,'');
@@ -290,9 +293,9 @@
   function cleanPlayers(list){
     if(!Array.isArray(list))return [];
     return list.filter(p=>p&&Number.isFinite(+p.ret)).map(p=>({
-      name:String(p.name||'anon').slice(0,16),
+      name:cleanText(p.name||'anon',16)||'anon',
       ret:+p.ret,
-      seed:String(p.seed||'').slice(0,32),
+      seed:cleanText(p.seed||'',32),
       rank:parseInt(p.rank,10)||1,
       ts:parseInt(p.ts,10)||Date.now()
     })).sort((a,b)=>b.ret-a.ret).slice(0,50);
@@ -339,6 +342,7 @@
   let mine=[], players=[];
   let lastResult=null;               // {no,seed,ret,rank,n,qualifies,ts}
   let boardTab='mine';
+  let appReady=false;
 
   function makeAcct(id,name,glyph,human){return{id,name,glyph,human,pos:0,avg:0,real:0,fees:0,tradeRets:[],closes:0,wins:0};}
   function exec(a,side,qty){
@@ -354,7 +358,8 @@
 
   // ---------- round lifecycle ----------
   function loadRound(){
-    seedStr=$('cfgSeed').value.trim()||'0';
+    seedStr=cleanText($('cfgSeed').value,32)||'0';
+    $('cfgSeed').value=seedStr;
     sigma=Math.max(0.01,parseFloat($('cfgSigma').value)||1)/100;
     costBps=Math.max(0,parseFloat($('cfgCost').value)||0);
     roundLen=Math.min(400,Math.max(30,parseInt($('cfgLen').value)||120));
@@ -456,18 +461,17 @@
     $('pEnv').textContent = ENV==='online'?'· 在线':(ENV==='local'?'· 本机':'· 临时');
     const sum=$('sSum'), log=$('sLog');
     if(boardTab==='mine'){
-      if(!mine.length){sum.innerHTML='';log.innerHTML='<div class="sempty">跑完一局,名次记在这里</div>';return;}
+      if(!mine.length){sum.innerHTML='<span>本机战绩 <b>0</b></span><span>未开局</span>';log.innerHTML='<div class="sempty">跑完一局,名次记在这里</div>';return;}
       const avgRank=mine.reduce((s,r)=>s+r.rank,0)/mine.length, best=Math.max(...mine.map(r=>r.ret));
       sum.innerHTML=`<span>均排名 <b>${avgRank.toFixed(1)} / 5</b></span><span>最佳 <b class="${cls(best)}">${sgn(best)}${fmt(best)}%</b></span>`;
-      log.innerHTML=mine.map(r=>`<div class="sitem"><span class="rk ${r.rank<=2?'up':(r.rank>=4?'down':'flat')}">#${r.rank}</span><span class="r">R${r.no} · seed ${r.seed}</span><span class="${cls(r.ret)}">${sgn(r.ret)}${fmt(r.ret)}%</span></div>`).join('');
+      log.innerHTML=mine.map(r=>`<div class="sitem"><span class="rk ${r.rank<=2?'up':(r.rank>=4?'down':'flat')}">#${r.rank}</span><span class="r">R${r.no} · seed ${esc(r.seed)}</span><span class="${cls(r.ret)}">${sgn(r.ret)}${fmt(r.ret)}%</span></div>`).join('');
     } else {
-      if(!players.length){sum.innerHTML='';log.innerHTML='<div class="sempty">还没人上榜。<br>跑赢全部机器人(名次 #1)即可上传。</div>';return;}
+      if(!players.length){sum.innerHTML=`<span>上榜玩家 <b>0</b></span><span>${ENV==='online'?'全球共享':'本机保存'}</span>`;log.innerHTML='<div class="sempty">还没人上榜。<br>跑赢全部机器人(名次 #1)即可上传。</div>';return;}
       sum.innerHTML=`<span>上榜玩家 <b>${players.length}</b></span><span>${ENV==='online'?'全球共享':'本机保存'}</span>`;
       const myTs=lastResult&&lastResult.ts;
       log.innerHTML=players.slice(0,20).map((p,i)=>{
         const mineFlag=(p.ts===myTs)?' mine':'';
-        const nm=(p.name||'anon').replace(/[<>&]/g,'');
-        return `<div class="sitem${mineFlag}"><span class="rk ${i<3?'up':'flat'}">${i+1}</span><span class="r">${nm} · seed ${p.seed}</span><span class="${cls(p.ret)}">${sgn(p.ret)}${fmt(p.ret)}%</span></div>`;
+        return `<div class="sitem${mineFlag}"><span class="rk ${i<3?'up':'flat'}">${i+1}</span><span class="r">${esc(p.name||'anon')} · seed ${esc(p.seed)}</span><span class="${cls(p.ret)}">${sgn(p.ret)}${fmt(p.ret)}%</span></div>`;
       }).join('');
     }
   }
@@ -498,15 +502,21 @@
   // ---------- result bar / upload ----------
   function showResultBar(){
     const r=lastResult; if(!r)return;
-    $('rbInfo').innerHTML=`<span class="big ${cls(r.ret)}">${sgn(r.ret)}${fmt(r.ret)}%</span><span>名次 <b class="${r.rank<=2?'up':r.rank>=4?'down':'flat'}">#${r.rank}/${r.n}</b></span><span>seed ${r.seed}</span>`;
+    $('rbInfo').innerHTML=`<span class="big ${cls(r.ret)}">${sgn(r.ret)}${fmt(r.ret)}%</span><span>名次 <b class="${r.rank<=2?'up':r.rank>=4?'down':'flat'}">#${r.rank}/${r.n}</b></span><span>seed ${esc(r.seed)}</span>`;
     const up=$('bUpload');
     up.disabled=!r.qualifies;
+    up.textContent='🏆 上传';
     $('rbHint').textContent = r.qualifies ? '' : '只有跑赢全部机器人(名次 #1)的成绩才能上榜。';
     $('resultBar').hidden=false;
   }
+  let uploadBusy=false;
   async function doUpload(){
-    const r=lastResult; if(!r||!r.qualifies)return;
-    const name=($('rbName').value.trim()||'anon').slice(0,16);
+    const r=lastResult; if(uploadBusy||!r||!r.qualifies)return;
+    uploadBusy=true;
+    const up=$('bUpload');
+    up.disabled=true; up.textContent='上传中...'; $('rbHint').textContent='正在写入全球玩家榜...';
+    const name=cleanText($('rbName').value||'anon',16)||'anon';
+    $('rbName').value=name;
     sset(K_NAME,name,false);
     let list=await postGlobalPlayer({name, ret:r.ret, seed:r.seed, rank:r.rank, ts:r.ts});
     if(!list){
@@ -520,7 +530,7 @@
     players=list;
     boardTab='players'; $('tabPlayers').classList.add('active'); $('tabMine').classList.remove('active');
     renderBoard();
-    $('bUpload').disabled=true; lastResult.qualifies=false;
+    up.disabled=true; up.textContent='已上传'; lastResult.qualifies=false; uploadBusy=false;
     toast(ENV==='online'?'已上传到全球玩家榜 🏆':'已保存到本机玩家榜 🏆');
   }
 
@@ -600,13 +610,13 @@
   function setLong(on){$('bLong').classList.toggle('on',on);}
   function setShort(on){$('bShort').classList.toggle('on',on);}
   function refreshTradeBtns(){setLong(human.pos>0);setShort(human.pos<0);}
-  function doLong(){if(phase==='ready')startRun();if(phase!=='done'){target(human,1,size);refreshTradeBtns();renderAll();}}
-  function doShort(){if(phase==='ready')startRun();if(phase!=='done'){target(human,-1,size);refreshTradeBtns();renderAll();}}
-  function doFlat(){if(phase!=='done'){if(human.pos!==0)exec(human,-Math.sign(human.pos),Math.abs(human.pos));refreshTradeBtns();renderAll();}}
+  function doLong(){if(!appReady)return;if(phase==='ready')startRun();if(phase!=='done'){target(human,1,size);refreshTradeBtns();renderAll();}}
+  function doShort(){if(!appReady)return;if(phase==='ready')startRun();if(phase!=='done'){target(human,-1,size);refreshTradeBtns();renderAll();}}
+  function doFlat(){if(!appReady)return;if(phase!=='done'){if(human.pos!==0)exec(human,-Math.sign(human.pos),Math.abs(human.pos));refreshTradeBtns();renderAll();}}
   function setPrimary(){const b=$('bPrimary');b.classList.toggle('go',phase!=='running');
     b.textContent=phase==='ready'?'▶ Start 开始':phase==='running'?'⏸ Pause 暂停':phase==='paused'?'▶ Resume 继续':'↻ Next round 下一局';}
-  function startRun(){phase='running';lastT=0;setPrimary();}
-  function primaryClick(){if(phase==='ready')startRun();else if(phase==='running'){phase='paused';setPrimary();renderAll();}else if(phase==='paused')startRun();else newRound();}
+  function startRun(){if(!appReady)return;phase='running';lastT=0;setPrimary();}
+  function primaryClick(){if(!appReady)return;if(phase==='ready')startRun();else if(phase==='running'){phase='paused';setPrimary();renderAll();}else if(phase==='paused')startRun();else newRound();}
   function setSize(v){size=Math.min(50,Math.max(1,v));$('szVal').textContent=size;}
   function switchTab(t){boardTab=t;$('tabMine').classList.toggle('active',t==='mine');$('tabPlayers').classList.toggle('active',t==='players');renderBoard();}
 
@@ -639,11 +649,13 @@
   async function init(){
     try{const rn=await sget(K_NAME,false);if(rn)$('rbName').value=rn;}catch(e){}
     try{const rm=await sget(K_MINE,false);if(rm)mine=JSON.parse(rm)||[];}catch(e){mine=[];}
-    const gp=await fetchGlobalPlayers();
-    if(gp)players=gp;
-    else{try{const rp=await sget(K_PLAYERS,true);if(rp)players=cleanPlayers(JSON.parse(rp)||[]);}catch(e){players=[];}}
+    try{const rp=await sget(K_PLAYERS,true);if(rp)players=cleanPlayers(JSON.parse(rp)||[]);}catch(e){players=[];}
     loadRound(); sizeCanvas(); renderBoard();
+    appReady=true; $('bPrimary').disabled=false;
     requestAnimationFrame(frame);
+    const gp=await fetchGlobalPlayers();
+    if(gp){players=gp;renderBoard();}
+    else renderBoard();
   }
   init();
 })();
