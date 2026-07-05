@@ -3,166 +3,184 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NOISE // 纯随机市场</title>
+<title>噪 · 纯随机市场</title>
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Noto+Serif+SC:wght@600;700;900&family=Spline+Sans+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0B0E13; --panel:#12161F; --panel2:#1A2030; --raise:#222A3B;
-    --grid:rgba(120,140,170,0.08); --hair:rgba(120,140,170,0.13); --hair2:rgba(120,140,170,0.22);
-    --ink:#DCE3EF; --muted:#7B879B; --dim:#525C6E;
-    --long:#37D3BD; --short:#F47A5D; --signal:#EBB65C;
-    --long-dim:rgba(55,211,189,.13); --short-dim:rgba(244,122,93,.13); --sig-dim:rgba(235,182,92,.12);
-    --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
-    --disp:'Space Grotesk',system-ui,sans-serif;
+    --paper:#F3E7CE; --panel:#FBF4E2; --panel2:#F0E4C9; --edge:#E4D3AC; --edge2:#D8C39A;
+    --ink:#2B2016; --ink2:#4A3B29; --muted:#8A7659; --faint:#B7A583;
+    --red:#C4351F; --green:#277A55; --gold:#B7852B; --gold-ink:#8F6A1B;
+    --red-wash:#F4E1D5; --green-wash:#DDE9DF; --gold-wash:#F3E9CC;
+    --plot:#3A2C1A; --grid:rgba(120,96,54,0.13); --hair:rgba(120,96,54,0.16);
+    --disp:'Bricolage Grotesque',system-ui,sans-serif;
+    --cjk:'Noto Serif SC','Bricolage Grotesque',serif;
+    --mono:'Spline Sans Mono',ui-monospace,Menlo,monospace;
+    --shadow:0 2px 10px -6px rgba(90,60,20,.30), 0 1px 2px rgba(90,60,20,.08);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
-  body{background:var(--bg); color:var(--ink); font-family:var(--disp); -webkit-font-smoothing:antialiased;
-    background-image:radial-gradient(1100px 520px at 78% -12%, rgba(235,182,92,.05), transparent 62%);}
-  .wrap{max-width:1080px; margin:0 auto; padding:18px 16px 36px}
+  body{
+    background:var(--paper); color:var(--ink); font-family:var(--disp); font-weight:500;
+    -webkit-font-smoothing:antialiased; letter-spacing:-.005em;
+    background-image:
+      radial-gradient(900px 500px at 82% -8%, rgba(196,53,31,.05), transparent 60%),
+      radial-gradient(700px 500px at 8% 108%, rgba(183,133,43,.06), transparent 60%),
+      repeating-linear-gradient(0deg, rgba(120,96,54,.028) 0 1px, transparent 1px 26px);
+  }
+  .wrap{max-width:1060px; margin:0 auto; padding:22px 16px 40px}
+  .mono{font-family:var(--mono); font-variant-numeric:tabular-nums}
+  .up{color:var(--red)} .down{color:var(--green)} .flat{color:var(--muted)}
 
-  header{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:14px}
-  .brand{display:flex; align-items:baseline; gap:11px}
-  .brand h1{font-size:20px; font-weight:700; letter-spacing:-.02em}
-  .brand h1 .n{color:var(--signal)}
-  .brand .sub{font-family:var(--mono); font-size:10px; color:var(--muted); letter-spacing:.14em; text-transform:uppercase}
-  .config{display:flex; gap:8px; flex-wrap:wrap}
+  /* header */
+  header{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px}
+  .brand{display:flex; align-items:center; gap:13px}
+  .logo{width:44px; height:44px; border-radius:12px; background:var(--red); color:#F7EDD8; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:900; box-shadow:var(--shadow); transform:rotate(-3deg); font-family:var(--cjk)}
+  .brand h1{font-size:25px; font-weight:700; letter-spacing:.01em; line-height:1; font-family:var(--cjk)}
+  .brand .sub{font-size:12.5px; color:var(--muted); font-weight:500; margin-top:3px}
+  .config{display:flex; gap:7px; flex-wrap:wrap}
   .field{display:flex; flex-direction:column; gap:3px}
-  .field label{font-family:var(--mono); font-size:8.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); padding-left:2px}
-  .field input{width:62px; background:var(--panel); border:1px solid var(--hair); color:var(--ink); font-family:var(--mono); font-size:12px; padding:5px 7px; border-radius:5px; outline:none}
-  .field input:focus{border-color:var(--signal)}
+  .field label{font-size:10.5px; color:var(--muted); font-weight:600; padding-left:3px}
+  .field input{width:60px; background:var(--panel); border:1.5px solid var(--edge); color:var(--ink); font-family:var(--mono); font-size:12.5px; font-weight:500; padding:6px 8px; border-radius:8px; outline:none}
+  .field input:focus{border-color:var(--gold)}
 
-  .board{display:grid; grid-template-columns:1fr 296px; gap:12px; align-items:start}
-  .panel{background:var(--panel); border:1px solid var(--hair); border-radius:11px}
-  .col{display:flex; flex-direction:column; gap:12px}
+  .board{display:grid; grid-template-columns:1fr 300px; gap:14px; align-items:start}
+  .panel{background:var(--panel); border:1.5px solid var(--edge); border-radius:15px; box-shadow:var(--shadow)}
+  .col{display:flex; flex-direction:column; gap:14px}
+  .ph{font-size:13px; font-weight:700; color:var(--ink2); margin-bottom:12px; display:flex; align-items:center; gap:8px}
+  .ph::before{content:""; width:8px; height:8px; border-radius:3px; background:var(--red); transform:rotate(45deg); flex:none}
 
-  .chartwrap{position:relative; padding:2px}
-  #chart{display:block; width:100%; height:340px; border-radius:10px}
-  .readout{position:absolute; top:13px; left:15px; font-family:var(--mono); pointer-events:none}
-  .readout .px{font-size:25px; font-weight:700; line-height:1}
-  .readout .chg{font-size:11.5px; margin-top:4px}
-  .tickbadge{position:absolute; top:14px; right:15px; font-family:var(--mono); font-size:10.5px; color:var(--dim); letter-spacing:.08em; pointer-events:none; text-align:right}
-  .up{color:var(--long)} .down{color:var(--short)} .flat{color:var(--muted)}
-  .progress{position:absolute; left:2px; right:2px; bottom:2px; height:3px; background:var(--hair); border-radius:0 0 10px 10px; overflow:hidden}
-  .progress .fill{height:100%; width:0%; background:var(--signal); transition:width .1s linear}
+  /* chart */
+  .chartwrap{position:relative; padding:3px}
+  #chart{display:block; width:100%; height:344px; border-radius:12px}
+  .readout{position:absolute; top:16px; left:18px; pointer-events:none}
+  .readout .px{font-family:var(--mono); font-size:27px; font-weight:700; line-height:1; letter-spacing:-.01em}
+  .readout .chg{font-family:var(--mono); font-size:12.5px; font-weight:600; margin-top:5px}
+  .tickbadge{position:absolute; top:17px; right:18px; font-size:12px; color:var(--muted); font-weight:600; text-align:right; pointer-events:none}
+  .progress{position:absolute; left:3px; right:3px; bottom:3px; height:4px; background:var(--edge); border-radius:0 0 12px 12px; overflow:hidden}
+  .progress .fill{height:100%; width:0%; background:var(--gold); transition:width .1s linear}
 
-  .trade{padding:15px 16px}
-  .bigbtns{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-  button.big{font-family:var(--disp); font-weight:700; font-size:17px; letter-spacing:.01em; padding:18px 0; border-radius:9px; border:1px solid transparent; cursor:pointer; transition:transform .05s, filter .12s, box-shadow .12s; position:relative}
-  button.big:active{transform:translateY(1px)}
-  .blong{background:var(--long-dim); border-color:rgba(55,211,189,.45); color:var(--long)}
-  .bshort{background:var(--short-dim); border-color:rgba(244,122,93,.45); color:var(--short)}
-  .blong.on{box-shadow:0 0 0 1px var(--long), 0 0 22px -6px var(--long); background:rgba(55,211,189,.2)}
-  .bshort.on{box-shadow:0 0 0 1px var(--short), 0 0 22px -6px var(--short); background:rgba(244,122,93,.2)}
-  button.big .k{position:absolute; top:7px; right:9px; font-family:var(--mono); font-size:9px; opacity:.6; font-weight:500}
-  .undertrade{display:flex; align-items:center; gap:12px; margin-top:11px}
-  .flatbtn{font-family:var(--mono); font-size:11px; letter-spacing:.08em; color:var(--muted); background:transparent; border:1px solid var(--hair); padding:8px 14px; border-radius:6px; cursor:pointer}
+  /* trade */
+  .trade{padding:16px}
+  .bigbtns{display:grid; grid-template-columns:1fr 1fr; gap:11px}
+  button.big{font-family:var(--disp); font-weight:800; font-size:18px; padding:19px 0; border-radius:13px; border:2px solid transparent; cursor:pointer; transition:transform .06s, box-shadow .14s, background .14s; position:relative}
+  button.big:active{transform:translateY(1.5px)}
+  .blong{background:var(--red-wash); border-color:rgba(196,53,31,.4); color:var(--red)}
+  .bshort{background:var(--green-wash); border-color:rgba(39,122,85,.42); color:var(--green)}
+  .blong.on{background:var(--red); color:#F7EDD8; border-color:var(--red); box-shadow:0 6px 18px -8px var(--red)}
+  .bshort.on{background:var(--green); color:#F1EEDD; border-color:var(--green); box-shadow:0 6px 18px -8px var(--green)}
+  button.big .k{position:absolute; top:8px; right:11px; font-family:var(--mono); font-size:10px; opacity:.55; font-weight:600}
+  .undertrade{display:flex; align-items:center; gap:12px; margin-top:12px}
+  .flatbtn{font-size:12.5px; font-weight:600; color:var(--muted); background:transparent; border:1.5px solid var(--edge); padding:9px 15px; border-radius:10px; cursor:pointer; font-family:var(--disp)}
   .flatbtn:hover{color:var(--ink); border-color:var(--muted)}
-  .sizer{display:flex; align-items:center; gap:2px; margin-left:auto; font-family:var(--mono)}
-  .sizer button{width:28px; height:28px; background:var(--panel2); border:1px solid var(--hair); color:var(--ink); border-radius:6px; cursor:pointer; font-size:15px; line-height:1}
+  .sizer{display:flex; align-items:center; gap:3px; margin-left:auto}
+  .sizer .szlab{font-size:11px; color:var(--muted); font-weight:600; margin-right:7px}
+  .sizer button{width:30px; height:30px; background:var(--panel2); border:1.5px solid var(--edge); color:var(--ink); border-radius:9px; cursor:pointer; font-size:17px; line-height:1; font-family:var(--disp); font-weight:700}
   .sizer button:active{transform:translateY(1px)}
-  .sizer .sz{width:40px; text-align:center; font-size:14px; font-weight:700}
-  .sizer .szlab{font-size:8.5px; color:var(--dim); letter-spacing:.1em; text-transform:uppercase; margin-right:6px}
+  .sizer .sz{width:40px; text-align:center; font-size:15px; font-weight:700; font-family:var(--mono)}
 
-  .transport{display:flex; align-items:center; gap:14px; padding:11px 14px}
-  .primary{flex:1; font-family:var(--disp); font-weight:700; font-size:14px; letter-spacing:.04em; padding:13px 0; border-radius:8px; border:1px solid var(--hair2); background:var(--panel2); color:var(--signal); cursor:pointer; text-transform:uppercase; transition:filter .12s}
-  .primary:hover{filter:brightness(1.15)}
+  /* transport */
+  .transport{display:flex; align-items:center; gap:14px; padding:12px 15px}
+  .primary{flex:1; font-family:var(--disp); font-weight:800; font-size:15px; padding:14px 0; border-radius:12px; border:2px solid var(--gold); background:var(--gold); color:#2B2016; cursor:pointer; transition:filter .12s, transform .06s; box-shadow:0 5px 16px -9px var(--gold)}
+  .primary:hover{filter:brightness(1.05)} .primary:active{transform:translateY(1.5px)}
   .primary:disabled{opacity:.45; cursor:wait; filter:none; box-shadow:none}
-  .primary.go{background:var(--sig-dim); border-color:var(--signal); box-shadow:0 0 22px -8px var(--signal)}
-  .speedbox{display:flex; align-items:center; gap:9px; font-family:var(--mono); font-size:9px; letter-spacing:.1em; color:var(--muted); text-transform:uppercase}
-  .speedbox .sv{color:var(--ink); width:16px; text-align:right}
-  input[type=range]{-webkit-appearance:none; appearance:none; height:3px; width:96px; background:var(--hair); border-radius:3px; outline:none}
-  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:13px; height:13px; border-radius:50%; background:var(--signal); cursor:pointer}
-  input[type=range]::-moz-range-thumb{width:13px; height:13px; border:none; border-radius:50%; background:var(--signal); cursor:pointer}
+  .primary.run{background:var(--panel2); color:var(--ink2); box-shadow:none}
+  .speedbox{display:flex; align-items:center; gap:9px; font-size:11.5px; color:var(--muted); font-weight:600}
+  .speedbox .sv{color:var(--ink); width:14px; text-align:right; font-family:var(--mono)}
+  input[type=range]{-webkit-appearance:none; appearance:none; height:4px; width:98px; background:var(--edge2); border-radius:4px; outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:var(--gold); border:2px solid var(--panel); cursor:pointer; box-shadow:0 1px 3px rgba(90,60,20,.3)}
+  input[type=range]::-moz-range-thumb{width:16px; height:16px; border:2px solid var(--panel); border-radius:50%; background:var(--gold); cursor:pointer}
 
-  .lead{padding:14px 15px}
-  .rail-h{font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:13px; display:flex; align-items:center; gap:9px}
-  .rail-h::after{content:""; flex:1; height:1px; background:var(--hair)}
-  .lrow{display:grid; grid-template-columns:18px 1fr; gap:9px; align-items:center; padding:6px 0}
-  .lrow .medal{font-family:var(--mono); font-size:12px; text-align:center; color:var(--muted)}
-  .lname{display:flex; align-items:baseline; justify-content:space-between; gap:6px; margin-bottom:4px}
-  .lname .who{font-size:12.5px; font-weight:500; display:flex; align-items:center; gap:6px}
-  .lname .who .g{font-size:11px; opacity:.8}
-  .lname .ret{font-family:var(--mono); font-size:12px; font-weight:700}
-  .bar{position:relative; height:5px; background:var(--panel2); border-radius:3px; overflow:hidden}
-  .bar .mid{position:absolute; left:50%; top:0; bottom:0; width:1px; background:var(--hair2)}
-  .bar .fill{position:absolute; top:0; bottom:0; border-radius:3px}
-  .lrow.you .who{color:var(--signal); font-weight:700}
-  .lrow.you{background:var(--sig-dim); border-radius:7px; margin:0 -6px; padding:6px}
+  /* leaderboard */
+  .lead{padding:15px 16px}
+  .lrow{display:grid; grid-template-columns:22px 1fr; gap:10px; align-items:center; padding:7px 0}
+  .medal{font-family:var(--mono); font-size:13px; font-weight:600; text-align:center; color:var(--faint)}
+  .coin{width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:11px; font-weight:700; color:#4A3410;
+    background:radial-gradient(circle at 35% 30%, #F0D68A, var(--gold)); border:1px solid #9C7622; box-shadow:0 1px 2px rgba(90,60,20,.25)}
+  .lname{display:flex; align-items:baseline; justify-content:space-between; gap:6px; margin-bottom:5px}
+  .lname .who{font-size:13px; font-weight:600; display:flex; align-items:center; gap:6px; color:var(--ink2)}
+  .lname .who .g{font-size:12px}
+  .lname .ret{font-family:var(--mono); font-size:12.5px; font-weight:700; font-variant-numeric:tabular-nums}
+  .bar{position:relative; height:6px; background:var(--panel2); border-radius:4px; overflow:hidden; border:1px solid var(--edge)}
+  .bar .mid{position:absolute; left:50%; top:0; bottom:0; width:1px; background:var(--edge2)}
+  .bar .fill{position:absolute; top:0; bottom:0; border-radius:4px}
+  .lrow.you{background:var(--gold-wash); border-radius:10px; margin:0 -8px; padding:7px 8px}
+  .lrow.you .who{color:var(--gold-ink); font-weight:800}
 
-  .estrip{padding:13px 15px}
-  .eq{font-family:var(--mono); font-size:24px; font-weight:700; letter-spacing:-.01em}
-  .eq .sm{font-size:13px; color:var(--muted)}
-  .eqline{display:flex; justify-content:space-between; margin-top:8px; font-family:var(--mono); font-size:11.5px}
+  /* equity */
+  .estrip{padding:14px 16px}
+  .eq{font-family:var(--mono); font-size:25px; font-weight:700; letter-spacing:-.01em}
+  .eq .sm{font-size:14px; color:var(--muted)}
+  .eqline{display:flex; justify-content:space-between; margin-top:9px; font-size:12.5px; font-weight:600}
   .eqline .k{color:var(--muted)}
+  .eqline .mono{font-weight:700}
 
-  /* board panel with tabs */
-  .board2{padding:14px 15px}
-  .tabs{display:flex; align-items:center; gap:4px; margin-bottom:12px}
-  .tab{font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); padding:5px 9px; border-radius:6px; cursor:pointer; border:1px solid transparent}
-  .tab.active{color:var(--signal); background:var(--sig-dim); border-color:var(--hair)}
-  .tab .env{font-size:8px; margin-left:4px; opacity:.7}
-  .clr{margin-left:auto; font-family:var(--mono); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); background:none; border:none; cursor:pointer}
+  /* board tabs */
+  .board2{padding:15px 16px}
+  .tabs{display:flex; align-items:center; gap:5px; margin-bottom:13px}
+  .tab{font-size:12.5px; font-weight:700; color:var(--muted); padding:6px 11px; border-radius:9px; cursor:pointer; border:1.5px solid transparent}
+  .tab.active{color:var(--gold-ink); background:var(--gold-wash); border-color:var(--edge)}
+  .tab .env{font-size:9.5px; margin-left:4px; font-weight:500; opacity:.8}
+  .clr{margin-left:auto; font-size:11px; font-weight:600; color:var(--faint); background:none; border:none; cursor:pointer; font-family:var(--disp)}
   .clr:hover{color:var(--muted)}
-  .ssum{font-family:var(--mono); font-size:11px; color:var(--muted); margin-bottom:9px; display:flex; justify-content:space-between}
+  .ssum{font-size:12px; color:var(--muted); font-weight:600; margin-bottom:10px; display:flex; justify-content:space-between}
   .ssum b{color:var(--ink)}
-  .slog{display:flex; flex-direction:column; gap:2px; max-height:186px; overflow-y:auto}
-  .slog::-webkit-scrollbar{width:5px}
-  .slog::-webkit-scrollbar-thumb{background:var(--hair2); border-radius:3px}
-  .sitem{display:grid; grid-template-columns:auto 1fr auto; gap:8px; font-family:var(--mono); font-size:11px; padding:5px 0; border-bottom:1px solid var(--grid); align-items:baseline}
-  .sitem .rk{font-weight:700} .sitem .r{color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-  .sitem.mine{background:var(--sig-dim); border-radius:6px; padding:5px 6px; margin:0 -6px}
-  .sitem.mine .r{color:var(--signal)}
-  .sempty{font-family:var(--mono); font-size:11px; color:var(--dim); text-align:center; padding:16px 6px; line-height:1.5}
+  .slog{display:flex; flex-direction:column; gap:1px; max-height:188px; overflow-y:auto}
+  .slog::-webkit-scrollbar{width:6px}.slog::-webkit-scrollbar-thumb{background:var(--edge2); border-radius:4px}
+  .sitem{display:grid; grid-template-columns:auto 1fr auto; gap:9px; font-size:12px; padding:6px 0; border-bottom:1px solid var(--grid); align-items:baseline}
+  .sitem .rk{font-weight:800; font-family:var(--mono)} .sitem .r{color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500}
+  .sitem .v{font-family:var(--mono); font-weight:700; font-variant-numeric:tabular-nums}
+  .sitem.mine{background:var(--gold-wash); border-radius:8px; padding:6px 7px; margin:0 -7px}
+  .sitem.mine .r{color:var(--gold-ink)}
+  .sempty{font-size:12px; color:var(--faint); text-align:center; padding:18px 6px; line-height:1.7; font-weight:500}
 
   /* result bar */
-  .resultbar{display:flex; align-items:center; gap:14px; padding:13px 16px; margin-top:12px; flex-wrap:wrap}
+  .resultbar{display:flex; align-items:center; gap:14px; padding:14px 16px; margin-top:14px; flex-wrap:wrap}
   .resultbar[hidden]{display:none}
-  .rb-info{font-family:var(--mono); font-size:12.5px; color:var(--muted); display:flex; align-items:center; gap:10px; flex-wrap:wrap}
-  .rb-info .big{font-size:15px; font-weight:700}
-  .rb-actions{display:flex; align-items:center; gap:8px; margin-left:auto; flex-wrap:wrap}
-  .rb-actions input{width:118px; background:var(--panel); border:1px solid var(--hair); color:var(--ink); font-family:var(--mono); font-size:12px; padding:8px 9px; border-radius:6px; outline:none}
-  .rb-actions input:focus{border-color:var(--signal)}
-  .abtn{font-family:var(--disp); font-weight:600; font-size:12.5px; padding:9px 14px; border-radius:7px; cursor:pointer; border:1px solid var(--hair2); background:var(--panel2); color:var(--ink); transition:filter .12s}
-  .abtn:hover{filter:brightness(1.18)}
-  .abtn.up{background:var(--sig-dim); border-color:var(--signal); color:var(--signal)}
-  .abtn:disabled{opacity:.4; cursor:not-allowed; filter:none}
-  .rb-hint{font-family:var(--mono); font-size:10px; color:var(--dim); width:100%; margin-top:-4px}
+  .rb-info{font-size:13px; color:var(--muted); font-weight:600; display:flex; align-items:center; gap:11px; flex-wrap:wrap}
+  .rb-info .big{font-family:var(--mono); font-size:17px; font-weight:700}
+  .rb-info b{color:var(--ink)}
+  .rb-actions{display:flex; align-items:center; gap:9px; margin-left:auto; flex-wrap:wrap}
+  .rb-actions input{width:120px; background:var(--panel2); border:1.5px solid var(--edge); color:var(--ink); font-family:var(--mono); font-size:12.5px; padding:9px 10px; border-radius:10px; outline:none}
+  .rb-actions input:focus{border-color:var(--gold)}
+  .abtn{font-family:var(--disp); font-weight:700; font-size:13px; padding:10px 16px; border-radius:11px; cursor:pointer; border:1.5px solid var(--edge); background:var(--panel2); color:var(--ink); transition:filter .12s, transform .06s}
+  .abtn:hover{filter:brightness(1.04)} .abtn:active{transform:translateY(1px)}
+  .abtn.up{background:var(--gold); border-color:var(--gold); color:#2B2016}
+  .abtn:disabled{opacity:.42; cursor:not-allowed; filter:none}
+  .rb-hint{font-size:11px; color:var(--faint); font-weight:500; width:100%; margin-top:-3px}
 
-  /* verdict */
-  .verdict{margin-top:12px; padding:18px 20px; position:relative; overflow:hidden}
-  .verdict::before{content:""; position:absolute; inset:0; background:linear-gradient(100deg, rgba(235,182,92,.05), transparent 55%); pointer-events:none}
-  .verdict h2{font-family:var(--mono); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--signal); margin-bottom:15px; display:flex; align-items:center; gap:10px}
-  .verdict h2::after{content:""; flex:1; height:1px; background:var(--hair)}
-  .vgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px}
-  .metric .lab{font-family:var(--mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:6px}
-  .metric .val{font-family:var(--mono); font-size:18px; font-weight:700}
-  .metric .note{font-family:var(--mono); font-size:10px; color:var(--dim); margin-top:3px}
-  .ruling{font-family:var(--disp); font-size:14px; line-height:1.55; color:var(--ink); border-top:1px solid var(--hair); padding-top:15px}
-  .ruling b{color:var(--signal)}
-  .ruling .tag{font-family:var(--mono); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; padding:2px 8px; border-radius:4px; margin-right:8px; vertical-align:1px}
-  .tag.luck{background:var(--signal); color:#1a140a}
-  .tag.wait{background:var(--panel2); color:var(--muted); border:1px solid var(--hair)}
-  .tag.cost{background:var(--short-dim); color:var(--short)}
+  /* fortune verdict — signature */
+  .verdict{margin-top:14px; padding:22px 24px; position:relative; overflow:hidden}
+  .seal{position:absolute; top:18px; right:22px; width:58px; height:58px; border:2.5px solid var(--red); border-radius:11px; color:var(--red); display:flex; align-items:center; justify-content:center; font-size:30px; font-weight:900; opacity:.82; transform:rotate(6deg); font-family:var(--cjk); box-shadow:inset 0 0 0 2px rgba(196,53,31,.18)}
+  .fhead{font-size:13px; font-weight:700; color:var(--muted); letter-spacing:.04em; margin-bottom:6px}
+  .grade{font-family:var(--cjk); font-size:40px; font-weight:900; letter-spacing:.04em; line-height:1.05; margin-bottom:16px}
+  .vgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:17px; max-width:520px}
+  .metric .lab{font-size:11.5px; color:var(--muted); font-weight:600; margin-bottom:5px}
+  .metric .val{font-family:var(--mono); font-size:19px; font-weight:700; font-variant-numeric:tabular-nums}
+  .metric .note{font-size:10.5px; color:var(--faint); font-weight:500; margin-top:3px}
+  .ruling{font-size:15px; line-height:1.66; color:var(--ink2); border-top:1.5px dashed var(--edge2); padding-top:16px; max-width:640px; font-weight:500}
+  .ruling b{color:var(--red); font-weight:700}
+  .ruling .n{color:var(--gold-ink)}
 
   /* share overlay */
-  .overlay{position:fixed; inset:0; background:rgba(6,8,12,.82); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:50; padding:20px}
+  .overlay{position:fixed; inset:0; background:rgba(43,32,22,.6); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:50; padding:20px}
   .overlay[hidden]{display:none}
-  .cardmodal{background:var(--panel); border:1px solid var(--hair2); border-radius:14px; padding:16px; max-width:520px; width:100%}
-  #shareCanvas{width:100%; height:auto; border-radius:9px; display:block; background:#0B0E13}
-  .cm-actions{display:flex; gap:8px; margin-top:14px; flex-wrap:wrap}
-  .cm-actions .abtn{flex:1; text-align:center; padding:11px 0}
-  .toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%); background:var(--raise); border:1px solid var(--hair2); color:var(--ink); font-family:var(--mono); font-size:12px; padding:9px 16px; border-radius:8px; z-index:60; opacity:0; transition:opacity .2s; pointer-events:none}
+  .cardmodal{background:var(--panel); border:1.5px solid var(--edge2); border-radius:18px; padding:16px; max-width:520px; width:100%; box-shadow:0 24px 60px -20px rgba(43,32,22,.5)}
+  #shareCanvas{width:100%; height:auto; border-radius:12px; display:block}
+  .cm-actions{display:flex; gap:9px; margin-top:14px}
+  .cm-actions .abtn{flex:1; text-align:center; padding:12px 0}
+  .toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%); background:var(--ink); border-radius:11px; color:var(--paper); font-size:13px; font-weight:600; padding:11px 18px; z-index:60; opacity:0; transition:opacity .2s; pointer-events:none; box-shadow:var(--shadow)}
   .toast.show{opacity:1}
 
   @media(max-width:820px){
     .board{grid-template-columns:1fr}
-    #chart{height:280px}
+    #chart{height:288px}
     .vgrid{grid-template-columns:1fr 1fr}
     .rb-actions{margin-left:0}
+    .seal{width:48px;height:48px;font-size:24px}
+    .grade{font-size:32px}
   }
 </style>
 </head>
@@ -170,14 +188,14 @@
 <div class="wrap">
   <header>
     <div class="brand">
-      <h1><span class="n">NOISE</span> // 纯随机市场</h1>
-      <span class="sub">zero-drift · race the bots</span>
+      <div class="logo">噪</div>
+      <div><h1>纯随机市场</h1><div class="sub">一场关于运气的实验 · 你读到的形态,都是自己编的</div></div>
     </div>
     <div class="config">
-      <div class="field"><label>Seed</label><input id="cfgSeed" value="1337" maxlength="32"></div>
-      <div class="field"><label>Vol%</label><input id="cfgSigma" value="1.0"></div>
-      <div class="field"><label>Cost bp</label><input id="cfgCost" value="2"></div>
-      <div class="field"><label>Ticks</label><input id="cfgLen" value="120"></div>
+      <div class="field"><label>种子</label><input id="cfgSeed" value="1337" maxlength="32"></div>
+      <div class="field"><label>波动%</label><input id="cfgSigma" value="1.0"></div>
+      <div class="field"><label>成本‱</label><input id="cfgCost" value="2"></div>
+      <div class="field"><label>局长</label><input id="cfgLen" value="120"></div>
     </div>
   </header>
 
@@ -186,41 +204,41 @@
       <div class="panel chartwrap">
         <canvas id="chart"></canvas>
         <div class="readout"><div class="px" id="rPrice">100.00</div><div class="chg flat" id="rChg">+0.00%</div></div>
-        <div class="tickbadge" id="rTick">READY</div>
+        <div class="tickbadge" id="rTick">就绪</div>
         <div class="progress"><div class="fill" id="rProg"></div></div>
       </div>
 
       <div class="panel trade">
         <div class="bigbtns">
-          <button class="big blong" id="bLong">▲ LONG 做多<span class="k">B</span></button>
-          <button class="big bshort" id="bShort">▼ SHORT 做空<span class="k">S</span></button>
+          <button class="big blong" id="bLong">做多 ▲<span class="k">B</span></button>
+          <button class="big bshort" id="bShort">做空 ▼<span class="k">S</span></button>
         </div>
         <div class="undertrade">
-          <button class="flatbtn" id="bFlat">FLAT 平仓 · F</button>
-          <div class="sizer"><span class="szlab">Size</span><button id="szDown">−</button><span class="sz" id="szVal">5</span><button id="szUp">+</button></div>
+          <button class="flatbtn" id="bFlat">平仓 · F</button>
+          <div class="sizer"><span class="szlab">手数</span><button id="szDown">−</button><span class="sz" id="szVal">5</span><button id="szUp">+</button></div>
         </div>
       </div>
 
       <div class="panel transport">
-        <button class="primary go" id="bPrimary" disabled>▶ Start 开始</button>
-        <div class="speedbox"><span>Speed</span><input type="range" id="tSpeed" min="1" max="10" value="3"><span class="sv" id="svVal">3</span></div>
+        <button class="primary" id="bPrimary" disabled>开始 ▶</button>
+        <div class="speedbox"><span>速度</span><input type="range" id="tSpeed" min="1" max="10" value="3"><span class="sv" id="svVal">3</span></div>
       </div>
     </div>
 
     <div class="col">
       <div class="panel lead">
-        <div class="rail-h">Leaderboard 排行 · 同一行情</div>
+        <div class="ph">同场竞技 · 一样的行情</div>
         <div id="leadBody"></div>
       </div>
       <div class="panel estrip">
         <div class="eq" id="sEquity">$10,000<span class="sm">.00</span></div>
-        <div class="eqline"><span class="k" id="sPos">FLAT 空仓</span><span id="sPnl" class="flat">$0.00</span></div>
+        <div class="eqline"><span class="k" id="sPos">空仓</span><span id="sPnl" class="mono flat">$0.00</span></div>
       </div>
       <div class="panel board2">
         <div class="tabs">
-          <span class="tab active" id="tabMine" data-t="mine">战绩</span>
-          <span class="tab" id="tabPlayers" data-t="players">玩家榜<span class="env" id="pEnv"></span></span>
-          <button class="clr" id="bClear">clear</button>
+          <span class="tab active" id="tabMine" data-t="mine">我的战绩</span>
+          <span class="tab" id="tabPlayers" data-t="players">江湖榜<span class="env" id="pEnv"></span></span>
+          <button class="clr" id="bClear">清空</button>
         </div>
         <div class="ssum" id="sSum"></div>
         <div class="slog" id="sLog"></div>
@@ -231,22 +249,24 @@
   <div class="panel resultbar" id="resultBar" hidden>
     <div class="rb-info" id="rbInfo"></div>
     <div class="rb-actions">
-      <input id="rbName" placeholder="handle 名字" maxlength="16">
-      <button class="abtn up" id="bUpload">🏆 上传</button>
-      <button class="abtn" id="bShare">🔗 分享</button>
+      <input id="rbName" placeholder="报个名号" maxlength="16">
+      <button class="abtn up" id="bUpload">上榜 🏆</button>
+      <button class="abtn" id="bShare">晒一张 🔗</button>
     </div>
     <div class="rb-hint" id="rbHint"></div>
   </div>
 
   <div class="panel verdict">
-    <h2>The Verdict · 判决</h2>
+    <div class="seal">噪</div>
+    <div class="fhead">今日签文</div>
+    <div class="grade" id="vGrade">待抽</div>
     <div class="vgrid">
-      <div class="metric"><div class="lab">Drift 漂移</div><div class="val" id="vDrift">—</div><div class="note">expected 0</div></div>
-      <div class="metric"><div class="lab">Your rank 你的名次</div><div class="val" id="vRank">—</div><div class="note">5 traders</div></div>
-      <div class="metric"><div class="lab">vs 🐒 Monkey</div><div class="val" id="vMonkey">—</div><div class="note" id="vMonkeyNote">你 − 猴子</div></div>
+      <div class="metric"><div class="lab">市场漂移</div><div class="val" id="vDrift">—</div><div class="note">理论值 0</div></div>
+      <div class="metric"><div class="lab">你的名次</div><div class="val" id="vRank">—</div><div class="note">共 5 位</div></div>
+      <div class="metric"><div class="lab">比猴子强</div><div class="val" id="vMonkey">—</div><div class="note" id="vMonkeyNote">你 − 猴子</div></div>
     </div>
     <div class="ruling" id="vRuling">
-      <span class="tag wait">待开始</span>点 START。价格是零漂移的鞅——没有信号。你会和 4 个机器人在<b>同一条行情</b>上赛跑,看名次能不能稳定超过纯运气。
+      点「开始」。价格是零漂移的随机游走——里面<b>没有信号</b>。你会和 4 位对手(动量、反转、买入持有,还有一只抛硬币的猴子)在<span class="n">同一条行情</span>上同场竞技,看你的名次能不能稳定压过纯运气。
     </div>
   </div>
 </div>
@@ -255,7 +275,7 @@
   <div class="cardmodal">
     <canvas id="shareCanvas" width="1280" height="720"></canvas>
     <div class="cm-actions">
-      <button class="abtn up" id="dlPng">下载 PNG</button>
+      <button class="abtn up" id="dlPng">存成图片</button>
       <button class="abtn" id="copyTxt">复制文案</button>
       <button class="abtn" id="closeShare">关闭</button>
     </div>
@@ -273,27 +293,27 @@
   const cleanText=(v,n)=>String(v||'').replace(/[<>&]/g,'').trim().slice(0,n);
 
   // ---------- layered storage: Worker leaderboard -> Claude shared storage -> localStorage -> memory ----------
-  const LEADERBOARD_API = 'https://noise-market-leaderboard.mm-sheng.workers.dev'.trim().replace(/\/+$/,'');
-  const hasWS = (typeof window!=='undefined' && window.storage && typeof window.storage.get==='function');
+  const LEADERBOARD_API='https://noise-market-leaderboard.mm-sheng.workers.dev'.trim().replace(/\/+$/,'');
+  const hasWS=(typeof window!=='undefined'&&window.storage&&typeof window.storage.get==='function');
   let hasLS=false; try{const k='__n_t';localStorage.setItem(k,'1');localStorage.removeItem(k);hasLS=true;}catch(e){}
   const mem={};
   const localEnv=()=>hasWS?'online':(hasLS?'local':'session');
-  let ENV = LEADERBOARD_API?'online':localEnv();
+  let ENV=LEADERBOARD_API?'online':localEnv();
   async function sget(key,shared){
-    try{ if(hasWS){const r=await window.storage.get(key,!!shared); return r?r.value:null;} }catch(e){}
+    try{ if(hasWS){const r=await window.storage.get(key,!!shared);return r?r.value:null;} }catch(e){}
     try{ if(hasLS){return localStorage.getItem(key);} }catch(e){}
     return mem[key]||null;
   }
   async function sset(key,val,shared){
-    try{ if(hasWS){await window.storage.set(key,val,!!shared); return;} }catch(e){}
-    try{ if(hasLS){localStorage.setItem(key,val); return;} }catch(e){}
+    try{ if(hasWS){await window.storage.set(key,val,!!shared);return;} }catch(e){}
+    try{ if(hasLS){localStorage.setItem(key,val);return;} }catch(e){}
     mem[key]=val;
   }
-  const K_MINE='noise:mine', K_PLAYERS='noise:players', K_NAME='noise:name';
+  const K_MINE='noise:mine',K_PLAYERS='noise:players',K_NAME='noise:name';
   function cleanPlayers(list){
     if(!Array.isArray(list))return [];
     return list.filter(p=>p&&Number.isFinite(+p.ret)).map(p=>({
-      name:cleanText(p.name||'anon',16)||'anon',
+      name:cleanText(p.name||'无名氏',16)||'无名氏',
       ret:+p.ret,
       seed:cleanText(p.seed||'',32),
       rank:parseInt(p.rank,10)||1,
@@ -308,7 +328,7 @@
       const data=await r.json();
       ENV='online';
       return cleanPlayers(data.players);
-    }catch(e){ ENV=localEnv(); return null; }
+    }catch(e){ENV=localEnv();return null;}
   }
   async function postGlobalPlayer(entry){
     if(!LEADERBOARD_API)return null;
@@ -322,7 +342,7 @@
       const data=await r.json();
       ENV='online';
       return cleanPlayers(data.players);
-    }catch(e){ ENV=localEnv(); return null; }
+    }catch(e){ENV=localEnv();return null;}
   }
 
   // ---------- RNG ----------
@@ -331,18 +351,14 @@
   let rng,monkeyRng,spare=null;
   function gauss(){if(spare!==null){const g=spare;spare=null;return g;}let u=0,v=0;while(u===0)u=rng();while(v===0)v=rng();const m=Math.sqrt(-2*Math.log(u));spare=m*Math.sin(2*Math.PI*v);return m*Math.cos(2*Math.PI*v);}
 
-  // ---------- constants / state ----------
-  const START=10000, PX=100, LB=6, BOT_SZ=5;
-  let sigma, costBps, seedStr, roundLen;
-  let price, ticks, buf, logSum, markers;
-  let accts, human;
+  // ---------- state ----------
+  const START=10000,PX=100,LB=6,BOT_SZ=5;
+  let sigma,costBps,seedStr,roundLen;
+  let price,ticks,buf,logSum,markers;
+  let accts,human;
   let phase='ready';
-  let acc=0, lastT=0, size=5, speed=3;
-  let roundNo=0;
-  let mine=[], players=[];
-  let lastResult=null;               // {no,seed,ret,rank,n,qualifies,ts}
-  let boardTab='mine';
-  let appReady=false;
+  let acc=0,lastT=0,size=5,speed=3;
+  let roundNo=0, mine=[], players=[], lastResult=null, boardTab='mine', appReady=false;
 
   function makeAcct(id,name,glyph,human){return{id,name,glyph,human,pos:0,avg:0,real:0,fees:0,tradeRets:[],closes:0,wins:0};}
   function exec(a,side,qty){
@@ -356,7 +372,6 @@
   const equity=a=>START+a.real+a.pos*(price-a.avg);
   const retPct=a=>(equity(a)/START-1)*100;
 
-  // ---------- round lifecycle ----------
   function loadRound(){
     seedStr=cleanText($('cfgSeed').value,32)||'0';
     $('cfgSeed').value=seedStr;
@@ -367,146 +382,157 @@
     rng=mulberry32(hashSeed(eff)); monkeyRng=mulberry32(hashSeed(eff)^0x9E3779B9); spare=null;
     price=PX; ticks=0; buf=[PX]; logSum=0; markers=[];
     accts=[
-      makeAcct('you','YOU','●',true),
-      makeAcct('mom','Momentum 动量','↗',false),
-      makeAcct('con','Contrarian 反转','↘',false),
-      makeAcct('bh','Buy&Hold 持有','◆',false),
-      makeAcct('monkey','Monkey 猴子','🐒',false),
+      makeAcct('you','你','●',true),
+      makeAcct('mom','动量','↗',false),
+      makeAcct('con','反转','↘',false),
+      makeAcct('bh','买入持有','◆',false),
+      makeAcct('monkey','猴子','🐒',false),
     ];
     human=accts[0]; phase='ready';
-    setLong(false); setShort(false);
-    $('resultBar').hidden=true;
+    setLong(false); setShort(false); $('resultBar').hidden=true;
     draw(); renderHUD(); renderLead(); renderVerdict(); setPrimary();
   }
-  function newRound(){ roundNo++; loadRound(); startRun(); }
+  function newRound(){roundNo++; loadRound(); startRun();}
 
   function stepBots(){
     const mom=accts[1],con=accts[2],bh=accts[3],mk=accts[4];
     if(ticks>LB){const sig=Math.sign(price-buf[buf.length-1-LB]);
-      if(sig){ if(Math.sign(mom.pos)!==sig)target(mom,sig,BOT_SZ); if(Math.sign(con.pos)!==-sig)target(con,-sig,BOT_SZ); }}
-    if(ticks===1) target(bh,1,BOT_SZ);
+      if(sig){if(Math.sign(mom.pos)!==sig)target(mom,sig,BOT_SZ);if(Math.sign(con.pos)!==-sig)target(con,-sig,BOT_SZ);}}
+    if(ticks===1)target(bh,1,BOT_SZ);
     if(monkeyRng()<0.05){const x=monkeyRng(),s=x<0.45?1:(x<0.9?-1:0);
-      if(s===0){if(mk.pos)exec(mk,-Math.sign(mk.pos),Math.abs(mk.pos));} else target(mk,s,BOT_SZ);}
+      if(s===0){if(mk.pos)exec(mk,-Math.sign(mk.pos),Math.abs(mk.pos));}else target(mk,s,BOT_SZ);}
   }
-  function tick(){
-    const r=-0.5*sigma*sigma+sigma*gauss();
-    price=price*Math.exp(r); logSum+=r; ticks++; buf.push(price);
-    stepBots();
-    if(ticks>=roundLen) finishRound();
-  }
+  function tick(){const r=-0.5*sigma*sigma+sigma*gauss();price=price*Math.exp(r);logSum+=r;ticks++;buf.push(price);stepBots();if(ticks>=roundLen)finishRound();}
   function standings(){return accts.map(a=>({id:a.id,ret:retPct(a)})).sort((x,y)=>y.ret-x.ret);}
   function finishRound(){
     phase='done';
-    const board=standings(), rank=board.findIndex(b=>b.id==='you')+1, ret=retPct(human);
-    lastResult={no:roundNo, seed:seedStr, ret, rank, n:board.length, qualifies:(rank===1&&ret>0), ts:Date.now()};
+    const board=standings(),rank=board.findIndex(b=>b.id==='you')+1,ret=retPct(human);
+    lastResult={no:roundNo,seed:seedStr,ret,rank,n:board.length,qualifies:(rank===1&&ret>0),ts:Date.now()};
     mine.unshift({no:roundNo,rank,ret,seed:seedStr,ts:lastResult.ts}); if(mine.length>60)mine.pop();
     sset(K_MINE,JSON.stringify(mine.slice(0,60)),false);
-    showResultBar();
-    if(boardTab==='mine') renderBoard();
-    setPrimary();
+    showResultBar(); if(boardTab==='mine')renderBoard(); setPrimary();
   }
 
   // ---------- chart ----------
-  const cv=$('chart'), ctx=cv.getContext('2d');
+  const cv=$('chart'),ctx=cv.getContext('2d');
   function sizeCanvas(){const r=cv.getBoundingClientRect(),dpr=window.devicePixelRatio||1;cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);draw();}
   function draw(){
     const W=cv.getBoundingClientRect().width,H=cv.getBoundingClientRect().height;
     ctx.clearRect(0,0,W,H);
-    const pad={l:8,r:52,t:8,b:8},gw=W-pad.l-pad.r,gh=H-pad.t-pad.b;
+    const pad={l:10,r:52,t:10,b:10},gw=W-pad.l-pad.r,gh=H-pad.t-pad.b;
     let lo=Math.min(...buf),hi=Math.max(...buf); if(hi-lo<1e-6){hi+=1;lo-=1;} const m=(hi-lo)*0.12;lo-=m;hi+=m;
-    const span=Math.max(1,roundLen-1), X=i=>pad.l+(i/span)*gw, Y=p=>pad.t+(1-(p-lo)/(hi-lo))*gh;
+    const span=Math.max(1,roundLen-1),X=i=>pad.l+(i/span)*gw,Y=p=>pad.t+(1-(p-lo)/(hi-lo))*gh;
     ctx.strokeStyle=css('--grid');ctx.lineWidth=1;
     for(let c=0;c<=8;c++){const x=pad.l+c/8*gw;ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,pad.t+gh);ctx.stroke();}
     for(let c=0;c<=5;c++){const y=pad.t+c/5*gh;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+gw,y);ctx.stroke();}
-    ctx.fillStyle=css('--dim');ctx.font='10px "JetBrains Mono",monospace';ctx.textAlign='left';
-    for(let c=0;c<=5;c++){const p=hi-(c/5)*(hi-lo);ctx.fillText(p.toFixed(2),pad.l+gw+7,pad.t+c/5*gh+3);}
-    if(human&&human.pos!==0){const y=Y(human.avg);ctx.strokeStyle=human.pos>0?css('--long'):css('--short');ctx.globalAlpha=.5;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+gw,y);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;}
-    markers.forEach(mk=>{const x=X(mk.t),yb=pad.t+gh-4;ctx.fillStyle=mk.side>0?css('--long'):css('--short');ctx.globalAlpha=.85;ctx.beginPath();if(mk.side>0){ctx.moveTo(x,yb-8);ctx.lineTo(x-4,yb);ctx.lineTo(x+4,yb);}else{ctx.moveTo(x,yb);ctx.lineTo(x-4,yb-8);ctx.lineTo(x+4,yb-8);}ctx.closePath();ctx.fill();ctx.globalAlpha=1;});
-    ctx.strokeStyle=css('--signal');ctx.lineWidth=1.6;ctx.shadowColor=css('--signal');ctx.shadowBlur=8;ctx.lineJoin='round';
-    ctx.beginPath();for(let i=0;i<buf.length;i++){const x=X(i),y=Y(buf[i]);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();ctx.shadowBlur=0;
-    const hx=X(buf.length-1),hy=Y(buf[buf.length-1]);ctx.fillStyle=css('--signal');ctx.beginPath();ctx.arc(hx,hy,3,0,7);ctx.fill();
+    ctx.fillStyle=css('--faint');ctx.font='11px "Spline Sans Mono",monospace';ctx.textAlign='left';
+    for(let c=0;c<=5;c++){const p=hi-(c/5)*(hi-lo);ctx.fillText(p.toFixed(2),pad.l+gw+7,pad.t+c/5*gh+3.5);}
+    if(human&&human.pos!==0){const y=Y(human.avg);ctx.strokeStyle=human.pos>0?css('--red'):css('--green');ctx.globalAlpha=.55;ctx.setLineDash([5,4]);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+gw,y);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;}
+    markers.forEach(mk=>{const x=X(mk.t),yb=pad.t+gh-4;ctx.fillStyle=mk.side>0?css('--red'):css('--green');ctx.globalAlpha=.9;ctx.beginPath();if(mk.side>0){ctx.moveTo(x,yb-9);ctx.lineTo(x-4.5,yb);ctx.lineTo(x+4.5,yb);}else{ctx.moveTo(x,yb);ctx.lineTo(x-4.5,yb-9);ctx.lineTo(x+4.5,yb-9);}ctx.closePath();ctx.fill();ctx.globalAlpha=1;});
+    ctx.strokeStyle=css('--plot');ctx.lineWidth=2.2;ctx.lineJoin='round';ctx.lineCap='round';
+    ctx.beginPath();for(let i=0;i<buf.length;i++){const x=X(i),y=Y(buf[i]);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();
+    const hx=X(buf.length-1),hy=Y(buf[buf.length-1]);
+    ctx.fillStyle=css('--paper');ctx.beginPath();ctx.arc(hx,hy,4.5,0,7);ctx.fill();
+    ctx.fillStyle=css('--plot');ctx.beginPath();ctx.arc(hx,hy,3,0,7);ctx.fill();
   }
 
-  // ---------- formatting ----------
+  // ---------- fmt ----------
   const fmt=(n,d=2)=>n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
   const money=n=>(n<0?'-$':'$')+fmt(Math.abs(n));
   const cls=n=>n>1e-9?'up':n<-1e-9?'down':'flat';
   const sgn=n=>(n>=0?'+':'');
 
   function renderHUD(){
-    const bh=(price/PX-1)*100, eq=equity(human), unreal=human.pos*(price-human.avg);
+    const bh=(price/PX-1)*100,eq=equity(human),unreal=human.pos*(price-human.avg);
     $('rPrice').textContent=fmt(price);
     const c=$('rChg');c.textContent=sgn(bh)+fmt(bh)+'%';c.className='chg '+cls(bh);
-    $('rTick').textContent=phase==='ready'?'READY':(phase==='done'?'ROUND '+roundNo+' · DONE':'TICK '+ticks+' / '+roundLen);
+    $('rTick').textContent=phase==='ready'?'就绪':(phase==='done'?'第 '+roundNo+' 局 · 收盘':'第 '+ticks+' / '+roundLen+' 拍');
     $('rProg').style.width=(ticks/roundLen*100)+'%';
     const w=Math.floor(eq);
     $('sEquity').innerHTML=(eq<0?'-$':'$')+Math.abs(w).toLocaleString()+'<span class="sm">.'+fmt(Math.abs(eq-w)).slice(2)+'</span>';
-    $('sPos').textContent=human.pos===0?'FLAT 空仓':((human.pos>0?'LONG +':'SHORT ')+human.pos+' @ '+fmt(human.avg));
-    const pn=$('sPnl');pn.textContent=money(human.real+unreal);pn.className=cls(human.real+unreal);
+    $('sPos').textContent=human.pos===0?'空仓':((human.pos>0?'多 +':'空 ')+human.pos+' @ '+fmt(human.avg));
+    const pn=$('sPnl');pn.textContent=money(human.real+unreal);pn.className='mono '+cls(human.real+unreal);
   }
 
   function renderLead(){
     const rows=accts.map(a=>({a,ret:retPct(a)})).sort((x,y)=>y.ret-x.ret);
-    const maxAbs=Math.max(0.4,...rows.map(r=>Math.abs(r.ret))), medals=['🥇','🥈','🥉'];
+    const maxAbs=Math.max(0.4,...rows.map(r=>Math.abs(r.ret)));
     $('leadBody').innerHTML=rows.map((r,i)=>{
-      const a=r.a,w=Math.min(50,Math.abs(r.ret)/maxAbs*50),pos=r.ret>=0,col=pos?css('--long'):css('--short');
+      const a=r.a,w=Math.min(50,Math.abs(r.ret)/maxAbs*50),pos=r.ret>=0,col=pos?css('--red'):css('--green');
       const fill=pos?`left:50%;width:${w}%;background:${col}`:`right:50%;width:${w}%;background:${col}`;
-      return `<div class="lrow${a.human?' you':''}"><div class="medal">${medals[i]||(i+1)}</div><div>
+      const rankCell=i<3?`<div class="coin">${i+1}</div>`:`<div class="medal">${i+1}</div>`;
+      return `<div class="lrow${a.human?' you':''}">${rankCell}<div>
         <div class="lname"><span class="who"><span class="g">${a.glyph}</span>${a.name}</span><span class="ret ${cls(r.ret)}">${sgn(r.ret)}${fmt(r.ret)}%</span></div>
         <div class="bar"><div class="mid"></div><div class="fill" style="${fill}"></div></div></div></div>`;
     }).join('');
   }
 
   function renderBoard(){
-    $('pEnv').textContent = ENV==='online'?'· 在线':(ENV==='local'?'· 本机':'· 临时');
-    const sum=$('sSum'), log=$('sLog');
+    $('pEnv').textContent=ENV==='online'?'· 在线':(ENV==='local'?'· 本机':'· 临时');
+    const sum=$('sSum'),log=$('sLog');
     if(boardTab==='mine'){
-      if(!mine.length){sum.innerHTML='<span>本机战绩 <b>0</b></span><span>未开局</span>';log.innerHTML='<div class="sempty">跑完一局,名次记在这里</div>';return;}
-      const avgRank=mine.reduce((s,r)=>s+r.rank,0)/mine.length, best=Math.max(...mine.map(r=>r.ret));
-      sum.innerHTML=`<span>均排名 <b>${avgRank.toFixed(1)} / 5</b></span><span>最佳 <b class="${cls(best)}">${sgn(best)}${fmt(best)}%</b></span>`;
-      log.innerHTML=mine.map(r=>`<div class="sitem"><span class="rk ${r.rank<=2?'up':(r.rank>=4?'down':'flat')}">#${r.rank}</span><span class="r">R${r.no} · seed ${esc(r.seed)}</span><span class="${cls(r.ret)}">${sgn(r.ret)}${fmt(r.ret)}%</span></div>`).join('');
-    } else {
-      if(!players.length){sum.innerHTML=`<span>上榜玩家 <b>0</b></span><span>${ENV==='online'?'全球共享':'本机保存'}</span>`;log.innerHTML='<div class="sempty">还没人上榜。<br>跑赢全部机器人(名次 #1)即可上传。</div>';return;}
-      sum.innerHTML=`<span>上榜玩家 <b>${players.length}</b></span><span>${ENV==='online'?'全球共享':'本机保存'}</span>`;
+      if(!mine.length){sum.innerHTML='<span>本机战绩 <b>0</b></span><span>未开局</span>';log.innerHTML='<div class="sempty">跑完一局,名次记在这儿</div>';return;}
+      const avgRank=mine.reduce((s,r)=>s+r.rank,0)/mine.length,best=Math.max(...mine.map(r=>r.ret));
+      sum.innerHTML=`<span>平均名次 <b>${avgRank.toFixed(1)} / 5</b></span><span>最佳 <b class="${cls(best)}">${sgn(best)}${fmt(best)}%</b></span>`;
+      log.innerHTML=mine.map(r=>`<div class="sitem"><span class="rk ${r.rank<=2?'up':(r.rank>=4?'down':'flat')}">#${r.rank}</span><span class="r">第${r.no}局 · 种子 ${esc(r.seed)}</span><span class="v ${cls(r.ret)}">${sgn(r.ret)}${fmt(r.ret)}%</span></div>`).join('');
+    }else{
+      if(!players.length){sum.innerHTML=`<span>上榜 <b>0</b> 人</span><span>${ENV==='online'?'全网共享':'本机保存'}</span>`;log.innerHTML='<div class="sempty">还没人上榜。<br>跑赢全部对手(名次 #1)才有资格。</div>';return;}
+      sum.innerHTML=`<span>上榜 <b>${players.length}</b> 人</span><span>${ENV==='online'?'全网共享':'本机保存'}</span>`;
       const myTs=lastResult&&lastResult.ts;
       log.innerHTML=players.slice(0,20).map((p,i)=>{
         const mineFlag=(p.ts===myTs)?' mine':'';
-        return `<div class="sitem${mineFlag}"><span class="rk ${i<3?'up':'flat'}">${i+1}</span><span class="r">${esc(p.name||'anon')} · seed ${esc(p.seed)}</span><span class="${cls(p.ret)}">${sgn(p.ret)}${fmt(p.ret)}%</span></div>`;
+        return `<div class="sitem${mineFlag}"><span class="rk ${i<3?'up':'flat'}">${i+1}</span><span class="r">${esc(p.name||'无名氏')} · 种子 ${esc(p.seed)}</span><span class="v ${cls(p.ret)}">${sgn(p.ret)}${fmt(p.ret)}%</span></div>`;
       }).join('');
     }
   }
 
+  function gradeInfo(rank){
+    return [null,
+      {t:'上上签',c:'var(--red)'},
+      {t:'上签',c:'var(--red)'},
+      {t:'中签',c:'var(--gold-ink)'},
+      {t:'下签',c:'var(--green)'},
+      {t:'下下签',c:'var(--green)'}
+    ][rank]||{t:'—',c:'var(--muted)'};
+  }
   function renderVerdict(){
     const drift=ticks>0?logSum/ticks*100:0;
     const dv=$('vDrift');dv.textContent=sgn(drift)+fmt(drift,3)+'%';dv.className='val '+cls(drift);
-    const board=standings(), rank=board.findIndex(b=>b.id==='you')+1;
+    const board=standings(),rank=board.findIndex(b=>b.id==='you')+1;
     $('vRank').textContent='#'+rank;$('vRank').className='val '+(rank<=2?'up':rank>=4?'down':'flat');
-    const monkey=accts.find(a=>a.id==='monkey'), diff=retPct(human)-retPct(monkey);
+    const monkey=accts.find(a=>a.id==='monkey'),diff=retPct(human)-retPct(monkey);
     const mv=$('vMonkey');mv.textContent=sgn(diff)+fmt(diff)+'%';mv.className='val '+cls(diff);
-    const rul=$('vRuling'), n=human.tradeRets.length;
-    if(phase==='ready'){rul.innerHTML='<span class="tag wait">待开始</span>点 START。价格是零漂移的鞅——没有信号。你会和 4 个机器人在<b>同一条行情</b>上赛跑,看名次能不能稳定超过纯运气。';return;}
-    if(phase==='done'){
-      let tag,txt;
-      if(rank===1){tag='<span class="tag luck">运气</span>';txt=`本局<b>第 1</b>——跑赢了动量、反转、买入持有和一只猴子。但零漂移噪声上的冠军是一次抽签,不是 alpha。多跑几局,你的均排名会朝 <b>3.0 / 5</b> 回归。`;}
-      else if(diff<0){tag='<span class="tag luck">输给猴子</span>';txt=`你排 <b>#${rank}</b>,还落后那只抛硬币的猴子 ${fmt(-diff)}%。名字唬人的动量、反转策略也一样贴着 0——没有信号可读。`;}
-      else{tag='<span class="tag luck">运气</span>';txt=`你排 <b>#${rank} / 5</b>。跑够 10+ 局看右边的均排名:它会收敛到 3 附近,证明名次和抛硬币没区别。`;}
-      if(human.fees>Math.abs(human.real+human.pos*(price-human.avg))*0.5 && retPct(human)<0){
-        tag='<span class="tag cost">被成本吃掉</span>';txt=`你交易 ${n} 次,付了 <b>${money(human.fees)}</b> 手续费。零漂移市场本是零和,加成本就成了<b>负和</b>——交易越多,输得越稳。`;}
-      rul.innerHTML=tag+txt; return;
+
+    const grade=$('vGrade'), rul=$('vRuling'), n=human.tradeRets.length;
+    if(phase==='ready'){
+      grade.textContent='待抽'; grade.style.color='var(--muted)';
+      rul.innerHTML='点「开始」。价格是零漂移的随机游走——里面<b>没有信号</b>。你会和 4 位对手在<span class="n">同一条行情</span>上同场竞技,看名次能不能稳定压过纯运气。';
+      return;
     }
-    if(n<3){rul.innerHTML='<span class="tag wait">进行中</span>用 B / S 一键翻多翻空。右边看你和机器人的实时名次。';}
-    else{const mean=human.tradeRets.reduce((a,b)=>a+b,0)/n;rul.innerHTML=`<span class="tag wait">进行中</span>已 ${n} 笔,每笔均值 <b>${money(mean)}</b>。撑到收盘再看判决——在零漂移上,这个数会向 0 塌。`;}
+    const gi=gradeInfo(rank); grade.textContent=gi.t; grade.style.color=gi.c;
+    if(phase==='done'){
+      let txt;
+      if(rank===1) txt=`这一局你<b>拔了头筹</b>——赢了动量、反转、买入持有,还有那只猴子。但零漂移的行情里,冠军只是一次运气好的抽签,不是本事。多抽几签,右边的平均名次会慢慢向 <span class="n">3.0 / 5</span> 归位。`;
+      else if(diff<0) txt=`你排 <b>第 ${rank}</b>,还输给了那只抛硬币的猴子 ${fmt(-diff)}%。名头唬人的动量、反转,也一样贴着 0——因为根本没有信号可读。`;
+      else txt=`你排 <b>第 ${rank} / 5</b>。多抽十几签,看右边的平均名次:它会收在 3 附近,说明名次和抛硬币没两样。`;
+      if(human.fees>Math.abs(human.real+human.pos*(price-human.avg))*0.5 && retPct(human)<0)
+        txt=`你出手 ${n} 次,交了 <b>${money(human.fees)}</b> 的过路费。零漂移市场本是零和,加上成本就成了<b>负和</b>——手越勤,输得越稳。`;
+      rul.innerHTML=txt; return;
+    }
+    if(n<3) rul.innerHTML='用 <b>B / S</b> 一键翻多翻空。右边盯着你和对手的实时名次。';
+    else{const mean=human.tradeRets.reduce((a,b)=>a+b,0)/n;rul.innerHTML=`已出手 ${n} 次,每笔均值 <b>${money(mean)}</b>。撑到收盘再看签——在零漂移里,这个数会往 0 塌。`;}
   }
   function renderAll(){draw();renderHUD();renderLead();renderVerdict();}
 
-  // ---------- result bar / upload ----------
+  // ---------- result / upload ----------
   function showResultBar(){
     const r=lastResult; if(!r)return;
-    $('rbInfo').innerHTML=`<span class="big ${cls(r.ret)}">${sgn(r.ret)}${fmt(r.ret)}%</span><span>名次 <b class="${r.rank<=2?'up':r.rank>=4?'down':'flat'}">#${r.rank}/${r.n}</b></span><span>seed ${esc(r.seed)}</span>`;
+    const gi=gradeInfo(r.rank);
+    $('rbInfo').innerHTML=`<span style="color:${gi.c};font-weight:800">${gi.t}</span><span class="big ${cls(r.ret)}">${sgn(r.ret)}${fmt(r.ret)}%</span><span>名次 <b class="${r.rank<=2?'up':r.rank>=4?'down':'flat'}">#${r.rank}/${r.n}</b></span><span>种子 ${esc(r.seed)}</span>`;
     const up=$('bUpload');
     up.disabled=!r.qualifies;
-    up.textContent='🏆 上传';
-    $('rbHint').textContent = r.qualifies ? '' : '只有跑赢全部机器人(名次 #1)的成绩才能上榜。';
+    up.textContent='上榜 🏆';
+    $('rbHint').textContent=r.qualifies?'':'只有跑赢全部对手(名次 #1)的成绩才有资格上榜。';
     $('resultBar').hidden=false;
   }
   let uploadBusy=false;
@@ -514,83 +540,72 @@
     const r=lastResult; if(uploadBusy||!r||!r.qualifies)return;
     uploadBusy=true;
     const up=$('bUpload');
-    up.disabled=true; up.textContent='上传中...'; $('rbHint').textContent='正在写入全球玩家榜...';
-    const name=cleanText($('rbName').value||'anon',16)||'anon';
+    up.disabled=true; up.textContent='上传中...'; $('rbHint').textContent='正在写入全网江湖榜...';
+    const name=cleanText($('rbName').value||'无名氏',16)||'无名氏';
     $('rbName').value=name;
     sset(K_NAME,name,false);
-    let list=await postGlobalPlayer({name, ret:r.ret, seed:r.seed, rank:r.rank, ts:r.ts});
+    let list=await postGlobalPlayer({name,ret:r.ret,seed:r.seed,rank:r.rank,ts:r.ts});
     if(!list){
-      const raw=await sget(K_PLAYERS,true);
-      try{list=raw?JSON.parse(raw):[];}catch(e){list=[];}
+      const raw=await sget(K_PLAYERS,true); try{list=raw?JSON.parse(raw):[];}catch(e){list=[];}
       list=cleanPlayers(list);
-      list.push({name, ret:r.ret, seed:r.seed, rank:r.rank, ts:r.ts});
+      list.push({name,ret:r.ret,seed:r.seed,rank:r.rank,ts:r.ts});
       list=cleanPlayers(list);
       await sset(K_PLAYERS,JSON.stringify(list),true);
     }
     players=list;
-    boardTab='players'; $('tabPlayers').classList.add('active'); $('tabMine').classList.remove('active');
-    renderBoard();
-    up.disabled=true; up.textContent='已上传'; lastResult.qualifies=false; uploadBusy=false;
-    toast(ENV==='online'?'已上传到全球玩家榜 🏆':'已保存到本机玩家榜 🏆');
+    boardTab='players'; $('tabPlayers').classList.add('active'); $('tabMine').classList.remove('active'); renderBoard();
+    up.disabled=true; up.textContent='已上榜'; lastResult.qualifies=false; uploadBusy=false;
+    toast(ENV==='online'?'已登上全网江湖榜 🏆':'已存入本机江湖榜 🏆');
   }
 
   // ---------- share card ----------
   function drawShareCard(){
     const r=lastResult||{ret:0,rank:5,n:5,seed:seedStr};
-    const c=$('shareCanvas'), g=c.getContext('2d'), W=1280,H=720;
-    g.fillStyle='#0B0E13';g.fillRect(0,0,W,H);
-    const grad=g.createRadialGradient(W*0.8,-60,80,W*0.8,-60,760);grad.addColorStop(0,'rgba(235,182,92,0.10)');grad.addColorStop(1,'rgba(235,182,92,0)');g.fillStyle=grad;g.fillRect(0,0,W,H);
-    // frame
-    g.strokeStyle='rgba(120,140,170,0.18)';g.lineWidth=2;g.strokeRect(24,24,W-48,H-48);
-    // title
-    g.fillStyle='#EBB65C';g.font='700 44px "Space Grotesk",sans-serif';g.textBaseline='top';
-    g.fillText('NOISE',60,58);g.fillStyle='#7B879B';g.font='600 30px "Space Grotesk",sans-serif';g.fillText('// 纯随机市场',196,70);
-    g.fillStyle='#525C6E';g.font='500 16px "JetBrains Mono",monospace';g.fillText('ZERO-DRIFT RANDOM MARKET · 零漂移 · 无信号',60,116);
+    const c=$('shareCanvas'),g=c.getContext('2d'),W=1280,H=720;
+    g.fillStyle='#F3E7CE';g.fillRect(0,0,W,H);
+    const grad=g.createRadialGradient(W*0.85,-40,60,W*0.85,-40,760);grad.addColorStop(0,'rgba(196,53,31,0.08)');grad.addColorStop(1,'rgba(196,53,31,0)');g.fillStyle=grad;g.fillRect(0,0,W,H);
+    g.strokeStyle='#D8C39A';g.lineWidth=3;g.strokeRect(28,28,W-56,H-56);
+    // logo chip + title
+    g.save();g.translate(74,92);g.rotate(-0.05);g.fillStyle='#C4351F';roundRect(g,-6,-34,58,58,14);g.fill();g.fillStyle='#F7EDD8';g.font='800 40px "Bricolage Grotesque",sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText('噪',23,-4);g.restore();
+    g.fillStyle='#2B2016';g.textAlign='left';g.textBaseline='alphabetic';g.font='800 46px "Bricolage Grotesque",sans-serif';g.fillText('纯随机市场',150,104);
+    g.fillStyle='#8A7659';g.font='500 20px "Bricolage Grotesque",sans-serif';g.fillText('一场关于运气的实验 · 零漂移 · 没有信号',150,138);
     // sparkline
-    const px={l:60,r:60,t:180,w:W-120,h:250};
+    const px={l:74,r:74,t:196,w:W-148,h:236};
     let lo=Math.min(...buf),hi=Math.max(...buf);if(hi-lo<1e-6){hi+=1;lo-=1;}const m=(hi-lo)*0.1;lo-=m;hi+=m;
     const span=Math.max(1,buf.length-1),X=i=>px.l+i/span*px.w,Y=p=>px.t+(1-(p-lo)/(hi-lo))*px.h;
-    g.strokeStyle='rgba(120,140,170,0.08)';g.lineWidth=1;
+    g.strokeStyle='rgba(120,96,54,0.13)';g.lineWidth=1;
     for(let k=0;k<=6;k++){const x=px.l+k/6*px.w;g.beginPath();g.moveTo(x,px.t);g.lineTo(x,px.t+px.h);g.stroke();}
     for(let k=0;k<=4;k++){const y=px.t+k/4*px.h;g.beginPath();g.moveTo(px.l,y);g.lineTo(px.l+px.w,y);g.stroke();}
-    g.strokeStyle='#EBB65C';g.lineWidth=2.4;g.shadowColor='#EBB65C';g.shadowBlur=14;g.lineJoin='round';
-    g.beginPath();for(let i=0;i<buf.length;i++){const x=X(i),y=Y(buf[i]);i?g.lineTo(x,y):g.moveTo(x,y);}g.stroke();g.shadowBlur=0;
-    // result block
-    const r0=lastResult||{}; const pos=(r0.ret||0)>=0, col=pos?'#37D3BD':'#F47A5D';
-    g.fillStyle='#7B879B';g.font='500 18px "JetBrains Mono",monospace';g.fillText('RETURN 收益',60,470);
-    g.fillStyle=col;g.font='700 92px "JetBrains Mono",monospace';
-    g.fillText((pos?'+':'')+ (r0.ret!=null?r0.ret.toFixed(2):'0.00') +'%',60,496);
-    // rank badge
-    g.fillStyle='#7B879B';g.font='500 18px "JetBrains Mono",monospace';g.textAlign='right';g.fillText('RANK 名次',W-60,470);
-    g.fillStyle=(r0.rank<=2?'#37D3BD':r0.rank>=4?'#F47A5D':'#DCE3EF');g.font='700 92px "JetBrains Mono",monospace';
-    g.fillText('#'+(r0.rank||'-')+'/'+(r0.n||5),W-60,496);
+    g.strokeStyle='#3A2C1A';g.lineWidth=2.8;g.lineJoin='round';g.lineCap='round';
+    g.beginPath();for(let i=0;i<buf.length;i++){const x=X(i),y=Y(buf[i]);i?g.lineTo(x,y):g.moveTo(x,y);}g.stroke();
+    // grade + numbers
+    const gi=[null,{t:'上上签',c:'#C4351F'},{t:'上签',c:'#C4351F'},{t:'中签',c:'#8F6A1B'},{t:'下签',c:'#277A55'},{t:'下下签',c:'#277A55'}][r.rank]||{t:'—',c:'#8A7659'};
+    g.textAlign='left';g.fillStyle='#8A7659';g.font='600 20px "Bricolage Grotesque",sans-serif';g.fillText('今日签文',74,494);
+    g.fillStyle=gi.c;g.font='800 74px "Bricolage Grotesque",sans-serif';g.fillText(gi.t,74,566);
+    const pos=(r.ret||0)>=0,col=pos?'#C4351F':'#277A55';
+    g.textAlign='right';
+    g.fillStyle='#8A7659';g.font='600 20px "Bricolage Grotesque",sans-serif';g.fillText('收益 · 名次',W-74,494);
+    g.fillStyle=col;g.font='800 60px "Spline Sans Mono",monospace';g.fillText((pos?'+':'')+(r.ret!=null?r.ret.toFixed(2):'0.00')+'%',W-74,552);
+    g.fillStyle='#4A3B29';g.font='700 34px "Spline Sans Mono",monospace';g.fillText('第 '+(r.rank||'-')+' / '+(r.n||5)+' 名',W-74,600);
     g.textAlign='left';
-    // tagline
-    g.fillStyle='#DCE3EF';g.font='600 26px "Space Grotesk",sans-serif';
-    const line = (r0.rank===1) ? '跑赢了动量 · 反转 · 买入持有 · 和一只抛硬币的猴子' : '在没有信号的市场里,名次就是抛硬币';
-    g.fillText(line,60,624);
-    g.fillStyle='#525C6E';g.font='500 16px "JetBrains Mono",monospace';
-    g.fillText('seed '+(r0.seed||seedStr)+'  ·  vol '+ (sigma*100).toFixed(1)+'%  ·  '+roundLen+' ticks  ·  @shengmm81 / Ignis',60,664);
+    // footer
+    g.fillStyle='#4A3B29';g.font='600 24px "Bricolage Grotesque",sans-serif';
+    g.fillText(r.rank===1?'赢了动量 · 反转 · 买入持有 · 和一只抛硬币的猴子':'没有信号的市场里,名次就是抛硬币',74,632);
+    g.fillStyle='#8A7659';g.font='500 17px "Spline Sans Mono",monospace';
+    g.fillText('种子 '+(r.seed||seedStr)+'   波动 '+(sigma*100).toFixed(1)+'%   '+roundLen+' 拍   @shengmm81 / Ignis',74,666);
     return c;
   }
-  function openShare(){ drawShareCard(); $('overlay').hidden=false; }
-  function downloadPng(){
-    try{const url=$('shareCanvas').toDataURL('image/png');const a=document.createElement('a');a.href=url;a.download='noise-'+(lastResult?lastResult.seed:'')+'-'+(lastResult?Math.round(lastResult.ret*100):'')+'.png';document.body.appendChild(a);a.click();a.remove();toast('PNG 已下载');}
-    catch(e){toast('下载失败,可右键图片另存');}
-  }
+  function roundRect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+  function openShare(){drawShareCard();$('overlay').hidden=false;}
+  function downloadPng(){try{const url=$('shareCanvas').toDataURL('image/png');const a=document.createElement('a');a.href=url;a.download='噪-'+(lastResult?lastResult.seed:'')+'.png';document.body.appendChild(a);a.click();a.remove();toast('图片已保存');}catch(e){toast('保存失败,可右键图片另存');}}
   function shareText(){
-    const r=lastResult||{ret:0,rank:5,n:5,seed:seedStr};
-    return `我在 NOISE(一个零漂移的纯随机市场)跑了 seed ${r.seed}:${sgn(r.ret)}${fmt(r.ret)}%,名次 #${r.rank}/${r.n}。`+
-      (r.rank===1?'这局我赢了动量、反转、买入持有和一只抛硬币的猴子——但零漂移上的第一名只是运气。':'在没有信号的市场里,名次就是抛硬币。')+
+    const r=lastResult||{ret:0,rank:5,n:5,seed:seedStr};const gi=[null,'上上签','上签','中签','下签','下下签'][r.rank]||'';
+    return `我在「纯随机市场」抽了个${gi}:种子 ${r.seed},${sgn(r.ret)}${fmt(r.ret)}%,第 ${r.rank}/${r.n} 名。`+
+      (r.rank===1?'这局赢了动量、反转、买入持有和一只抛硬币的猴子——但零漂移里的第一名只是运气。':'没有信号的市场里,名次就是抛硬币。')+
       ' 敢来对账吗? #对账 #预测市场';
   }
-  function copyText(){
-    const t=shareText();
-    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>toast('文案已复制')).catch(()=>fallbackCopy(t));}
-    else fallbackCopy(t);
-  }
+  function copyText(){const t=shareText();if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>toast('文案已复制')).catch(()=>fallbackCopy(t));}else fallbackCopy(t);}
   function fallbackCopy(t){const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('文案已复制');}catch(e){toast('复制失败,请手动选择');}ta.remove();}
-
   let toastT=null;
   function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),1900);}
 
@@ -599,10 +614,9 @@
     if(phase==='running'){
       if(!lastT)lastT=ts; acc+=ts-lastT; lastT=ts;
       const interval=Math.round(680*Math.pow(0.79,speed-1));
-      let did=false;
-      while(acc>=interval&&phase==='running'){tick();acc-=interval;did=true;}
+      let did=false; while(acc>=interval&&phase==='running'){tick();acc-=interval;did=true;}
       if(did)renderAll();
-    } else lastT=0;
+    }else lastT=0;
     requestAnimationFrame(frame);
   }
 
@@ -613,8 +627,8 @@
   function doLong(){if(!appReady)return;if(phase==='ready')startRun();if(phase!=='done'){target(human,1,size);refreshTradeBtns();renderAll();}}
   function doShort(){if(!appReady)return;if(phase==='ready')startRun();if(phase!=='done'){target(human,-1,size);refreshTradeBtns();renderAll();}}
   function doFlat(){if(!appReady)return;if(phase!=='done'){if(human.pos!==0)exec(human,-Math.sign(human.pos),Math.abs(human.pos));refreshTradeBtns();renderAll();}}
-  function setPrimary(){const b=$('bPrimary');b.classList.toggle('go',phase!=='running');
-    b.textContent=phase==='ready'?'▶ Start 开始':phase==='running'?'⏸ Pause 暂停':phase==='paused'?'▶ Resume 继续':'↻ Next round 下一局';}
+  function setPrimary(){const b=$('bPrimary');b.classList.toggle('run',phase==='running');
+    b.textContent=phase==='ready'?'开始 ▶':phase==='running'?'暂停 ⏸':phase==='paused'?'继续 ▶':'再来一局 ↻';}
   function startRun(){if(!appReady)return;phase='running';lastT=0;setPrimary();}
   function primaryClick(){if(!appReady)return;if(phase==='ready')startRun();else if(phase==='running'){phase='paused';setPrimary();renderAll();}else if(phase==='paused')startRun();else newRound();}
   function setSize(v){size=Math.min(50,Math.max(1,v));$('szVal').textContent=size;}
@@ -627,8 +641,8 @@
   $('tabMine').onclick=()=>switchTab('mine'); $('tabPlayers').onclick=()=>switchTab('players');
   $('bClear').onclick=async()=>{
     if(boardTab==='mine'){mine=[];await sset(K_MINE,'[]',false);}
-    else if(ENV==='online'){toast('全球榜不能在前端清空');return;}
-    else {players=[];await sset(K_PLAYERS,'[]',true);}
+    else if(ENV==='online'){toast('全网江湖榜不能在前端清空');return;}
+    else{players=[];await sset(K_PLAYERS,'[]',true);}
     renderBoard();
   };
   $('bUpload').onclick=doUpload; $('bShare').onclick=openShare;
@@ -645,7 +659,6 @@
   });
   window.addEventListener('resize',sizeCanvas);
 
-  // ---------- init ----------
   async function init(){
     try{const rn=await sget(K_NAME,false);if(rn)$('rbName').value=rn;}catch(e){}
     try{const rm=await sget(K_MINE,false);if(rm)mine=JSON.parse(rm)||[];}catch(e){mine=[];}
