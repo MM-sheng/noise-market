@@ -46,7 +46,7 @@ npx wrangler deploy
 After deploy, set:
 
 ```js
-const LEADERBOARD_API = 'https://noise-market-leaderboard.YOUR_WORKERS_SUBDOMAIN.workers.dev';
+const LEADERBOARD_API = 'https://noise-market-leaderboard.mm-sheng.workers.dev';
 ```
 
 If `LEADERBOARD_API` is empty or unreachable, the game automatically falls back

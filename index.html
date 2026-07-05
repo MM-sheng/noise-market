@@ -270,7 +270,7 @@
   const css=v=>cssCache[v]||(cssCache[v]=getComputedStyle(document.documentElement).getPropertyValue(v).trim());
 
   // ---------- layered storage: Worker leaderboard -> Claude shared storage -> localStorage -> memory ----------
-  const LEADERBOARD_API = ''.trim().replace(/\/+$/,'');
+  const LEADERBOARD_API = 'https://noise-market-leaderboard.mm-sheng.workers.dev'.trim().replace(/\/+$/,'');
   const hasWS = (typeof window!=='undefined' && window.storage && typeof window.storage.get==='function');
   let hasLS=false; try{const k='__n_t';localStorage.setItem(k,'1');localStorage.removeItem(k);hasLS=true;}catch(e){}
   const mem={};
