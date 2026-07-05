@@ -1,54 +1,35 @@
-# NOISE // 纯随机市场
+# 纯随机市场 · Pure Random Market
 
-A zero-drift random-market trading game. The price is a seeded, driftless
-geometric-Brownian martingale — there is provably no signal to read. Trade it,
-then race 4 bots (Momentum, Contrarian, Buy&Hold, and a coin-flipping Monkey)
-on the *same* price path. The leaderboard makes the lesson visceral: on pure
-noise, your rank is a coin toss.
+一个证明“零漂移市场里没有信号”的交互实验。玩家在同一条随机游走行情上做多做空，和动量、反转、买入持有、随机对手同场竞技。
 
-Single static file. No build for the game. The optional global leaderboard is
-a tiny Cloudflare Worker backed by KV.
+Live:
 
-## Deploy (pick one, ~60s)
+- Frontend: https://mm-sheng.github.io/noise-market/
+- Leaderboard Worker: https://noise-market-leaderboard.mm-sheng.workers.dev
 
-### GitHub Pages
+## 部署
+
+前端是单文件静态站点，入口是 `index.html`，GitHub Pages 从 `main` 分支根目录发布。
+
 ```bash
-git init && git add index.html README.md && git commit -m "NOISE market"
-git branch -M main
-gh repo create noise-market --public --source=. --push
-gh api -X POST repos/MM-sheng/noise-market/pages -f "source[branch]=main" -f "source[path]=/"
-# live at: https://MM-sheng.github.io/noise-market/
+git add index.html README.md worker/src/index.js wrangler.toml
+git commit -m "Deploy optimized noise market"
+git push origin main
 ```
 
-### Vercel (one command)
-```bash
-npx vercel --prod
-```
-
-### Surge (one command)
-```bash
-npx surge . noise-market.surge.sh
-```
-
-## Global players board
-
-The frontend now supports a real shared leaderboard through `worker/src/index.js`.
-Deploy the Worker, then paste the Worker URL into `LEADERBOARD_API` near the top
-of the script in `index.html`.
+全网排行榜使用 Cloudflare Worker + KV。Worker 会用种子和玩家操作轨迹重放整局，只接受服务器确认的标准局第一名。
 
 ```bash
-npx wrangler login
-npx wrangler kv namespace create LEADERBOARD
-# Put the returned id into wrangler.toml under [[kv_namespaces]]
 npx wrangler deploy
 ```
 
-After deploy, set:
+当前 KV namespace 已绑定在 `wrangler.toml`:
 
-```js
-const LEADERBOARD_API = 'https://noise-market-leaderboard.mm-sheng.workers.dev';
+```toml
+binding = "LB"
+id = "4f0ef4d171334058b34443f3fb21a8d9"
 ```
 
-If `LEADERBOARD_API` is empty or unreachable, the game automatically falls back
-to Claude canvas shared storage when available, then localStorage on the visitor
-device.
+## 公平口径
+
+全球榜只收标准局：波动 `1%`，成本 `2‱`，局长 `120` tick。改参数仍可玩、可分享、本机留痕，但不进全球榜。

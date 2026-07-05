@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>噪 · 纯随机市场</title>
+<title>纯随机市场 · Pure Random Market</title>
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,28 +22,27 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
-  body{
-    background:var(--paper); color:var(--ink); font-family:var(--disp); font-weight:500;
-    -webkit-font-smoothing:antialiased; letter-spacing:-.005em;
-    background-image:
-      radial-gradient(900px 500px at 82% -8%, rgba(196,53,31,.05), transparent 60%),
-      radial-gradient(700px 500px at 8% 108%, rgba(183,133,43,.06), transparent 60%),
-      repeating-linear-gradient(0deg, rgba(120,96,54,.028) 0 1px, transparent 1px 26px);
-  }
+  body{background:var(--paper); color:var(--ink); font-family:var(--disp); font-weight:500; -webkit-font-smoothing:antialiased; letter-spacing:-.005em;
+    background-image:radial-gradient(900px 500px at 82% -8%, rgba(196,53,31,.05), transparent 60%),radial-gradient(700px 500px at 8% 108%, rgba(183,133,43,.06), transparent 60%),repeating-linear-gradient(0deg, rgba(120,96,54,.028) 0 1px, transparent 1px 26px);}
   .wrap{max-width:1060px; margin:0 auto; padding:22px 16px 40px}
   .mono{font-family:var(--mono); font-variant-numeric:tabular-nums}
   .up{color:var(--red)} .down{color:var(--green)} .flat{color:var(--muted)}
+  .mk{display:block}
 
-  /* header */
   header{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px}
   .brand{display:flex; align-items:center; gap:13px}
-  .logo{width:44px; height:44px; border-radius:12px; background:var(--red); color:#F7EDD8; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:900; box-shadow:var(--shadow); transform:rotate(-3deg); font-family:var(--cjk)}
-  .brand h1{font-size:25px; font-weight:700; letter-spacing:.01em; line-height:1; font-family:var(--cjk)}
+  .logo{width:46px; height:46px; border-radius:13px; background:var(--red); color:#F7EDD8; display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow); transform:rotate(-3deg)}
+  .logo .mk{width:30px; height:30px}
+  .brand h1{font-size:24px; font-weight:700; letter-spacing:.01em; line-height:1; font-family:var(--cjk)}
   .brand .sub{font-size:12.5px; color:var(--muted); font-weight:500; margin-top:3px}
+  .topr{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+  .lang{display:flex; border:1.5px solid var(--edge); border-radius:9px; overflow:hidden; font-family:var(--mono)}
+  .lang button{background:var(--panel); border:none; color:var(--muted); font-size:12px; font-weight:600; padding:6px 10px; cursor:pointer}
+  .lang button.on{background:var(--gold); color:#2B2016}
   .config{display:flex; gap:7px; flex-wrap:wrap}
   .field{display:flex; flex-direction:column; gap:3px}
   .field label{font-size:10.5px; color:var(--muted); font-weight:600; padding-left:3px}
-  .field input{width:60px; background:var(--panel); border:1.5px solid var(--edge); color:var(--ink); font-family:var(--mono); font-size:12.5px; font-weight:500; padding:6px 8px; border-radius:8px; outline:none}
+  .field input{width:58px; background:var(--panel); border:1.5px solid var(--edge); color:var(--ink); font-family:var(--mono); font-size:12.5px; font-weight:500; padding:6px 8px; border-radius:8px; outline:none}
   .field input:focus{border-color:var(--gold)}
 
   .board{display:grid; grid-template-columns:1fr 300px; gap:14px; align-items:start}
@@ -52,7 +51,6 @@
   .ph{font-size:13px; font-weight:700; color:var(--ink2); margin-bottom:12px; display:flex; align-items:center; gap:8px}
   .ph::before{content:""; width:8px; height:8px; border-radius:3px; background:var(--red); transform:rotate(45deg); flex:none}
 
-  /* chart */
   .chartwrap{position:relative; padding:3px}
   #chart{display:block; width:100%; height:344px; border-radius:12px}
   .readout{position:absolute; top:16px; left:18px; pointer-events:none}
@@ -62,7 +60,6 @@
   .progress{position:absolute; left:3px; right:3px; bottom:3px; height:4px; background:var(--edge); border-radius:0 0 12px 12px; overflow:hidden}
   .progress .fill{height:100%; width:0%; background:var(--gold); transition:width .1s linear}
 
-  /* trade */
   .trade{padding:16px}
   .bigbtns{display:grid; grid-template-columns:1fr 1fr; gap:11px}
   button.big{font-family:var(--disp); font-weight:800; font-size:18px; padding:19px 0; border-radius:13px; border:2px solid transparent; cursor:pointer; transition:transform .06s, box-shadow .14s, background .14s; position:relative}
@@ -81,24 +78,21 @@
   .sizer button:active{transform:translateY(1px)}
   .sizer .sz{width:40px; text-align:center; font-size:15px; font-weight:700; font-family:var(--mono)}
 
-  /* transport */
   .transport{display:flex; align-items:center; gap:14px; padding:12px 15px}
   .primary{flex:1; font-family:var(--disp); font-weight:800; font-size:15px; padding:14px 0; border-radius:12px; border:2px solid var(--gold); background:var(--gold); color:#2B2016; cursor:pointer; transition:filter .12s, transform .06s; box-shadow:0 5px 16px -9px var(--gold)}
   .primary:hover{filter:brightness(1.05)} .primary:active{transform:translateY(1.5px)}
-  .primary:disabled{opacity:.45; cursor:wait; filter:none; box-shadow:none}
   .primary.run{background:var(--panel2); color:var(--ink2); box-shadow:none}
+  .primary:disabled{opacity:.48; cursor:wait; filter:none; transform:none; box-shadow:none}
   .speedbox{display:flex; align-items:center; gap:9px; font-size:11.5px; color:var(--muted); font-weight:600}
   .speedbox .sv{color:var(--ink); width:14px; text-align:right; font-family:var(--mono)}
-  input[type=range]{-webkit-appearance:none; appearance:none; height:4px; width:98px; background:var(--edge2); border-radius:4px; outline:none}
+  input[type=range]{-webkit-appearance:none; appearance:none; height:4px; width:92px; background:var(--edge2); border-radius:4px; outline:none}
   input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:var(--gold); border:2px solid var(--panel); cursor:pointer; box-shadow:0 1px 3px rgba(90,60,20,.3)}
   input[type=range]::-moz-range-thumb{width:16px; height:16px; border:2px solid var(--panel); border-radius:50%; background:var(--gold); cursor:pointer}
 
-  /* leaderboard */
   .lead{padding:15px 16px}
   .lrow{display:grid; grid-template-columns:22px 1fr; gap:10px; align-items:center; padding:7px 0}
   .medal{font-family:var(--mono); font-size:13px; font-weight:600; text-align:center; color:var(--faint)}
-  .coin{width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:11px; font-weight:700; color:#4A3410;
-    background:radial-gradient(circle at 35% 30%, #F0D68A, var(--gold)); border:1px solid #9C7622; box-shadow:0 1px 2px rgba(90,60,20,.25)}
+  .coin{width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:11px; font-weight:700; color:#4A3410; background:radial-gradient(circle at 35% 30%, #F0D68A, var(--gold)); border:1px solid #9C7622; box-shadow:0 1px 2px rgba(90,60,20,.25)}
   .lname{display:flex; align-items:baseline; justify-content:space-between; gap:6px; margin-bottom:5px}
   .lname .who{font-size:13px; font-weight:600; display:flex; align-items:center; gap:6px; color:var(--ink2)}
   .lname .who .g{font-size:12px}
@@ -109,15 +103,12 @@
   .lrow.you{background:var(--gold-wash); border-radius:10px; margin:0 -8px; padding:7px 8px}
   .lrow.you .who{color:var(--gold-ink); font-weight:800}
 
-  /* equity */
   .estrip{padding:14px 16px}
   .eq{font-family:var(--mono); font-size:25px; font-weight:700; letter-spacing:-.01em}
   .eq .sm{font-size:14px; color:var(--muted)}
   .eqline{display:flex; justify-content:space-between; margin-top:9px; font-size:12.5px; font-weight:600}
   .eqline .k{color:var(--muted)}
-  .eqline .mono{font-weight:700}
 
-  /* board tabs */
   .board2{padding:15px 16px}
   .tabs{display:flex; align-items:center; gap:5px; margin-bottom:13px}
   .tab{font-size:12.5px; font-weight:700; color:var(--muted); padding:6px 11px; border-radius:9px; cursor:pointer; border:1.5px solid transparent}
@@ -136,7 +127,6 @@
   .sitem.mine .r{color:var(--gold-ink)}
   .sempty{font-size:12px; color:var(--faint); text-align:center; padding:18px 6px; line-height:1.7; font-weight:500}
 
-  /* result bar */
   .resultbar{display:flex; align-items:center; gap:14px; padding:14px 16px; margin-top:14px; flex-wrap:wrap}
   .resultbar[hidden]{display:none}
   .rb-info{font-size:13px; color:var(--muted); font-weight:600; display:flex; align-items:center; gap:11px; flex-wrap:wrap}
@@ -151,26 +141,24 @@
   .abtn:disabled{opacity:.42; cursor:not-allowed; filter:none}
   .rb-hint{font-size:11px; color:var(--faint); font-weight:500; width:100%; margin-top:-3px}
 
-  /* fortune verdict — signature */
   .verdict{margin-top:14px; padding:22px 24px; position:relative; overflow:hidden}
-  .seal{position:absolute; top:18px; right:22px; width:58px; height:58px; border:2.5px solid var(--red); border-radius:11px; color:var(--red); display:flex; align-items:center; justify-content:center; font-size:30px; font-weight:900; opacity:.82; transform:rotate(6deg); font-family:var(--cjk); box-shadow:inset 0 0 0 2px rgba(196,53,31,.18)}
+  .seal{position:absolute; top:18px; right:22px; width:60px; height:60px; border:2.5px solid var(--red); border-radius:12px; color:var(--red); display:flex; align-items:center; justify-content:center; opacity:.82; transform:rotate(6deg); box-shadow:inset 0 0 0 2px rgba(196,53,31,.18)}
+  .seal .mk{width:36px; height:36px}
   .fhead{font-size:13px; font-weight:700; color:var(--muted); letter-spacing:.04em; margin-bottom:6px}
-  .grade{font-family:var(--cjk); font-size:40px; font-weight:900; letter-spacing:.04em; line-height:1.05; margin-bottom:16px}
+  .grade{font-family:var(--cjk); font-size:40px; font-weight:900; letter-spacing:.02em; line-height:1.05; margin-bottom:16px}
   .vgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:17px; max-width:520px}
   .metric .lab{font-size:11.5px; color:var(--muted); font-weight:600; margin-bottom:5px}
   .metric .val{font-family:var(--mono); font-size:19px; font-weight:700; font-variant-numeric:tabular-nums}
   .metric .note{font-size:10.5px; color:var(--faint); font-weight:500; margin-top:3px}
   .ruling{font-size:15px; line-height:1.66; color:var(--ink2); border-top:1.5px dashed var(--edge2); padding-top:16px; max-width:640px; font-weight:500}
-  .ruling b{color:var(--red); font-weight:700}
-  .ruling .n{color:var(--gold-ink)}
+  .ruling b{color:var(--red); font-weight:700} .ruling .n{color:var(--gold-ink)}
 
-  /* share overlay */
   .overlay{position:fixed; inset:0; background:rgba(43,32,22,.6); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:50; padding:20px}
   .overlay[hidden]{display:none}
   .cardmodal{background:var(--panel); border:1.5px solid var(--edge2); border-radius:18px; padding:16px; max-width:520px; width:100%; box-shadow:0 24px 60px -20px rgba(43,32,22,.5)}
   #shareCanvas{width:100%; height:auto; border-radius:12px; display:block}
-  .cm-actions{display:flex; gap:9px; margin-top:14px}
-  .cm-actions .abtn{flex:1; text-align:center; padding:12px 0}
+  .cm-actions{display:flex; gap:9px; margin-top:14px; flex-wrap:wrap}
+  .cm-actions .abtn{flex:1; text-align:center; padding:12px 0; min-width:96px}
   .toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%); background:var(--ink); border-radius:11px; color:var(--paper); font-size:13px; font-weight:600; padding:11px 18px; z-index:60; opacity:0; transition:opacity .2s; pointer-events:none; box-shadow:var(--shadow)}
   .toast.show{opacity:1}
 
@@ -179,7 +167,7 @@
     #chart{height:288px}
     .vgrid{grid-template-columns:1fr 1fr}
     .rb-actions{margin-left:0}
-    .seal{width:48px;height:48px;font-size:24px}
+    .seal{width:50px;height:50px}.seal .mk{width:30px;height:30px}
     .grade{font-size:32px}
   }
 </style>
@@ -188,14 +176,17 @@
 <div class="wrap">
   <header>
     <div class="brand">
-      <div class="logo">噪</div>
-      <div><h1>纯随机市场</h1><div class="sub">一场关于运气的实验 · 你读到的形态,都是自己编的</div></div>
+      <div class="logo"><svg class="mk" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="13" r="3.6"/><circle cx="24" cy="13" r="3.6"/><path d="M7 14a9 9 0 0 1 18 0c0 5.5-4 9.5-9 9.5S7 19.5 7 14Z"/><ellipse cx="16" cy="18.5" rx="5.2" ry="4"/><circle cx="13" cy="14" r="1.15" fill="currentColor" stroke="none"/><circle cx="19" cy="14" r="1.15" fill="currentColor" stroke="none"/><circle cx="14.6" cy="18.6" r=".8" fill="currentColor" stroke="none"/><circle cx="17.4" cy="18.6" r=".8" fill="currentColor" stroke="none"/></svg></div>
+      <div><h1 id="brandTitle">纯随机市场</h1><div class="sub" id="brandSub"></div></div>
     </div>
-    <div class="config">
-      <div class="field"><label>种子</label><input id="cfgSeed" value="1337" maxlength="32"></div>
-      <div class="field"><label>波动%</label><input id="cfgSigma" value="1.0"></div>
-      <div class="field"><label>成本‱</label><input id="cfgCost" value="2"></div>
-      <div class="field"><label>局长</label><input id="cfgLen" value="120"></div>
+    <div class="topr">
+      <div class="lang"><button id="langZh" class="on">中</button><button id="langEn">EN</button></div>
+      <div class="config">
+        <div class="field"><label id="lblSeed">种子</label><input id="cfgSeed" value="1337" maxlength="32"></div>
+        <div class="field"><label id="lblVol">波动%</label><input id="cfgSigma" value="1.0"></div>
+        <div class="field"><label id="lblCost">成本‱</label><input id="cfgCost" value="2"></div>
+        <div class="field"><label id="lblLen">局长</label><input id="cfgLen" value="120"></div>
+      </div>
     </div>
   </header>
 
@@ -204,40 +195,35 @@
       <div class="panel chartwrap">
         <canvas id="chart"></canvas>
         <div class="readout"><div class="px" id="rPrice">100.00</div><div class="chg flat" id="rChg">+0.00%</div></div>
-        <div class="tickbadge" id="rTick">就绪</div>
+        <div class="tickbadge" id="rTick"></div>
         <div class="progress"><div class="fill" id="rProg"></div></div>
       </div>
-
       <div class="panel trade">
         <div class="bigbtns">
-          <button class="big blong" id="bLong">做多 ▲<span class="k">B</span></button>
-          <button class="big bshort" id="bShort">做空 ▼<span class="k">S</span></button>
+          <button class="big blong" id="bLong"></button>
+          <button class="big bshort" id="bShort"></button>
         </div>
         <div class="undertrade">
-          <button class="flatbtn" id="bFlat">平仓 · F</button>
-          <div class="sizer"><span class="szlab">手数</span><button id="szDown">−</button><span class="sz" id="szVal">5</span><button id="szUp">+</button></div>
+          <button class="flatbtn" id="bFlat"></button>
+          <div class="sizer"><span class="szlab" id="szLab">手数</span><button id="szDown">−</button><span class="sz" id="szVal">5</span><button id="szUp">+</button></div>
         </div>
       </div>
-
       <div class="panel transport">
-        <button class="primary" id="bPrimary" disabled>开始 ▶</button>
-        <div class="speedbox"><span>速度</span><input type="range" id="tSpeed" min="1" max="10" value="3"><span class="sv" id="svVal">3</span></div>
+        <button class="primary" id="bPrimary" disabled></button>
+        <div class="speedbox"><span id="speedLab">速度</span><input type="range" id="tSpeed" min="1" max="10" value="3"><span class="sv" id="svVal">3</span></div>
       </div>
     </div>
 
     <div class="col">
-      <div class="panel lead">
-        <div class="ph">同场竞技 · 一样的行情</div>
-        <div id="leadBody"></div>
-      </div>
+      <div class="panel lead"><div class="ph" id="leadHead"></div><div id="leadBody"></div></div>
       <div class="panel estrip">
         <div class="eq" id="sEquity">$10,000<span class="sm">.00</span></div>
-        <div class="eqline"><span class="k" id="sPos">空仓</span><span id="sPnl" class="mono flat">$0.00</span></div>
+        <div class="eqline"><span class="k" id="sPos"></span><span id="sPnl" class="mono flat">$0.00</span></div>
       </div>
       <div class="panel board2">
         <div class="tabs">
-          <span class="tab active" id="tabMine" data-t="mine">我的战绩</span>
-          <span class="tab" id="tabPlayers" data-t="players">江湖榜<span class="env" id="pEnv"></span></span>
+          <span class="tab active" id="tabMine">我的战绩</span>
+          <span class="tab" id="tabPlayers">江湖榜<span class="env" id="pEnv"></span></span>
           <button class="clr" id="bClear">清空</button>
         </div>
         <div class="ssum" id="sSum"></div>
@@ -250,24 +236,22 @@
     <div class="rb-info" id="rbInfo"></div>
     <div class="rb-actions">
       <input id="rbName" placeholder="报个名号" maxlength="16">
-      <button class="abtn up" id="bUpload">上榜 🏆</button>
-      <button class="abtn" id="bShare">晒一张 🔗</button>
+      <button class="abtn up" id="bUpload"></button>
+      <button class="abtn" id="bShare"></button>
     </div>
     <div class="rb-hint" id="rbHint"></div>
   </div>
 
   <div class="panel verdict">
-    <div class="seal">噪</div>
-    <div class="fhead">今日签文</div>
-    <div class="grade" id="vGrade">待抽</div>
+    <div class="seal"><svg class="mk" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="13" r="3.6"/><circle cx="24" cy="13" r="3.6"/><path d="M7 14a9 9 0 0 1 18 0c0 5.5-4 9.5-9 9.5S7 19.5 7 14Z"/><ellipse cx="16" cy="18.5" rx="5.2" ry="4"/><circle cx="13" cy="14" r="1.15" fill="currentColor" stroke="none"/><circle cx="19" cy="14" r="1.15" fill="currentColor" stroke="none"/><circle cx="14.6" cy="18.6" r=".8" fill="currentColor" stroke="none"/><circle cx="17.4" cy="18.6" r=".8" fill="currentColor" stroke="none"/></svg></div>
+    <div class="fhead" id="fhead">今日签文</div>
+    <div class="grade" id="vGrade"></div>
     <div class="vgrid">
-      <div class="metric"><div class="lab">市场漂移</div><div class="val" id="vDrift">—</div><div class="note">理论值 0</div></div>
-      <div class="metric"><div class="lab">你的名次</div><div class="val" id="vRank">—</div><div class="note">共 5 位</div></div>
-      <div class="metric"><div class="lab">比猴子强</div><div class="val" id="vMonkey">—</div><div class="note" id="vMonkeyNote">你 − 猴子</div></div>
+      <div class="metric"><div class="lab" id="mDrift">市场漂移</div><div class="val" id="vDrift">—</div><div class="note" id="mDriftNote">理论值 0</div></div>
+      <div class="metric"><div class="lab" id="mRank">你的名次</div><div class="val" id="vRank">—</div><div class="note" id="mRankNote">共 5 位</div></div>
+      <div class="metric"><div class="lab" id="mMonkey">比猴子强</div><div class="val" id="vMonkey">—</div><div class="note" id="vMonkeyNote">你 − 猴子</div></div>
     </div>
-    <div class="ruling" id="vRuling">
-      点「开始」。价格是零漂移的随机游走——里面<b>没有信号</b>。你会和 4 位对手(动量、反转、买入持有,还有一只抛硬币的猴子)在<span class="n">同一条行情</span>上同场竞技,看你的名次能不能稳定压过纯运气。
-    </div>
+    <div class="ruling" id="vRuling"></div>
   </div>
 </div>
 
@@ -275,9 +259,10 @@
   <div class="cardmodal">
     <canvas id="shareCanvas" width="1280" height="720"></canvas>
     <div class="cm-actions">
-      <button class="abtn up" id="dlPng">存成图片</button>
-      <button class="abtn" id="copyTxt">复制文案</button>
-      <button class="abtn" id="closeShare">关闭</button>
+      <button class="abtn up" id="dlPng"></button>
+      <button class="abtn" id="copyLink"></button>
+      <button class="abtn" id="copyTxt"></button>
+      <button class="abtn" id="closeShare"></button>
     </div>
   </div>
 </div>
@@ -287,135 +272,179 @@
 (function(){
   'use strict';
   const $=id=>document.getElementById(id);
-  const cssCache={};
-  const css=v=>cssCache[v]||(cssCache[v]=getComputedStyle(document.documentElement).getPropertyValue(v).trim());
-  const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const cleanText=(v,n)=>String(v||'').replace(/[<>&]/g,'').trim().slice(0,n);
+  const cssCache={}; const css=v=>cssCache[v]||(cssCache[v]=getComputedStyle(document.documentElement).getPropertyValue(v).trim());
+  const esc=v=>String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const cleanSeed=v=>(String(v??'').replace(/[^\w\-:.]/g,'').slice(0,32)||'0');
+  const cleanName=v=>(String(v||(lang==='zh'?'无名氏':'anon')).replace(/[<>&"'\\]/g,'').trim().slice(0,16)||(lang==='zh'?'无名氏':'anon'));
 
-  // ---------- layered storage: Worker leaderboard -> Claude shared storage -> localStorage -> memory ----------
-  const LEADERBOARD_API='https://noise-market-leaderboard.mm-sheng.workers.dev'.trim().replace(/\/+$/,'');
+  /* ===== CONFIG: paste your Worker URL here to turn on the global board ===== */
+  const API_BASE = "https://noise-market-leaderboard.mm-sheng.workers.dev";
+  const qp = new URLSearchParams(location.search);
+  const apiBase = (qp.get('api') || API_BASE || '').replace(/\/+$/,'');
+
+  // ---------- i18n ----------
+  const L = {
+    zh:{
+      sub:'一场关于运气的实验 · 你读到的形态,都是自己编的',
+      seed:'种子',vol:'波动%',cost:'成本‱',len:'局长',
+      long:'做多 ▲',short:'做空 ▼',flat:'平仓 · F',sizeLab:'手数',speed:'速度',
+      start:'开始 ▶',pause:'暂停 ⏸',resume:'继续 ▶',next:'再来一局 ↻',
+      ready:'就绪',done:n=>'第 '+n+' 局 · 收盘',tick:(t,l)=>'第 '+t+' / '+l+' 拍',
+      leadHead:'同场竞技 · 一样的行情',
+      botYou:'你',botMom:'动量',botCon:'反转',botBh:'买入持有',botMonkey:'猴子',
+      posFlat:'空仓',posLong:(q,p)=>'多 +'+q+' @ '+p,posShort:(q,p)=>'空 '+q+' @ '+p,
+      tabMine:'我的战绩',tabPlayers:'江湖榜',clear:'清空',
+      envOnline:'· 在线',envLocal:'· 本机',envTemp:'· 临时',
+      mineEmpty:'跑完一局,名次记在这儿',
+      avgRank:r=>'平均名次 <b>'+r+' / 5</b>',best:(s,v)=>'最佳 <b class="'+(v>=0?'up':'down')+'">'+s+'</b>',
+      mineRow:(no,seed)=>'第'+no+'局 · 种子 '+seed,
+      playersEmpty:'还没人上榜。<br>跑赢全部对手(名次 #1)才有资格。',
+      playersOn:n=>'上榜 <b>'+n+'</b> 人',shareScope:on=>on?'全网共享':'本机保存',
+      playerRow:(nm,seed)=>nm+' · 种子 '+seed,
+      fhead:'今日签文',grades:['','上上签','上签','中签','下签','下下签'],
+      mDrift:'市场漂移',mDriftNote:'理论值 0',mRank:'你的名次',mRankNote:'共 5 位',mMonkey:'比猴子强',mMonkeyNote:'你 − 猴子',
+      rReady:'点「开始」。价格是零漂移的随机游走——里面<b>没有信号</b>。你会和 4 位对手(动量、反转、买入持有,还有一只抛硬币的猴子)在<span class="n">同一条行情</span>上同场竞技,看名次能不能稳定压过纯运气。',
+      rRun0:'用 <b>B / S</b> 一键翻多翻空。右边盯着你和对手的实时名次。',
+      rRun:(m)=>'已出手若干次,每笔均值 <b>'+m+'</b>。撑到收盘再看签——在零漂移里,这个数会往 0 塌。',
+      rFirst:'这一局你<b>拔了头筹</b>——赢了动量、反转、买入持有,还有那只猴子。但零漂移的行情里,冠军只是一次运气好的抽签,不是本事。多抽几签,右边的平均名次会慢慢向 <span class="n">3.0 / 5</span> 归位。',
+      rLoseMonkey:(rk,d)=>'你排 <b>第 '+rk+'</b>,还输给了那只抛硬币的猴子 '+d+'。名头唬人的动量、反转,也一样贴着 0——因为根本没有信号可读。',
+      rMid:rk=>'你排 <b>第 '+rk+' / 5</b>。多抽十几签,看右边的平均名次:它会收在 3 附近,说明名次和抛硬币没两样。',
+      rCost:(n,f)=>'你出手 '+n+' 次,交了 <b>'+f+'</b> 的过路费。零漂移市场本是零和,加上成本就成了<b>负和</b>——手越勤,输得越稳。',
+      nameHolder:'报个名号',upload:'上榜 🏆',share:'晒一张 🔗',
+      rbGrade:(g,c)=>'<span style="color:'+c+';font-weight:800">'+g+'</span>',
+      rbRank:(rk,n)=>'名次 <b class="'+(rk<=2?'up':rk>=4?'down':'flat')+'">#'+rk+'/'+n+'</b>',rbSeed:s=>'种子 '+s,
+      hintNotFirst:'只有跑赢全部对手(名次 #1)的成绩才有资格上榜。',
+      hintNotCanon:'全球榜只收标准局:波动 1% · 成本 2‱ · 120 拍。',
+      upOnline:'已登上全网江湖榜 🏆',upLocal:'已存入本机江湖榜 🏆',upReject:'服务器复盘后:你并非第一,未上榜。',upErr:'网络出错,先存了本机。',
+      savePng:'存成图片',copyLink:'复制挑战链接',copyTxt:'复制文案',close:'关闭',
+      tSaved:'图片已保存',tLinkCopied:'挑战链接已复制',tTxtCopied:'文案已复制',tCopyFail:'复制失败,请手动选择',
+      cardSub:'一场关于运气的实验 · 零漂移 · 没有信号',cardFortune:'今日签文',cardRR:'收益 · 名次',cardRankN:(r,n)=>'第 '+r+' / '+n+' 名',
+      cardTagFirst:'赢了动量 · 反转 · 买入持有 · 和一只抛硬币的猴子',cardTag:'没有信号的市场里,名次就是抛硬币',
+      shareTxt:(gi,seed,s,rk,n,first,url)=>'我在「纯随机市场」抽了个'+gi+':种子 '+seed+','+s+',第 '+rk+'/'+n+' 名。'+(first?'这局赢了动量、反转、买入持有和一只抛硬币的猴子——但零漂移里的第一名只是运气。':'没有信号的市场里,名次就是抛硬币。')+' 敢来对账吗?同一条行情等你 👉 '+url+' #对账',
+      title:'纯随机市场'
+    },
+    en:{
+      sub:'An experiment about luck · the patterns you see, you invented',
+      seed:'Seed',vol:'Vol%',cost:'Cost bp',len:'Ticks',
+      long:'LONG ▲',short:'SHORT ▼',flat:'FLAT · F',sizeLab:'Size',speed:'Speed',
+      start:'Start ▶',pause:'Pause ⏸',resume:'Resume ▶',next:'Next round ↻',
+      ready:'Ready',done:n=>'Round '+n+' · done',tick:(t,l)=>'Tick '+t+' / '+l,
+      leadHead:'Same market · five traders',
+      botYou:'You',botMom:'Momentum',botCon:'Contrarian',botBh:'Buy & Hold',botMonkey:'Monkey',
+      posFlat:'Flat',posLong:(q,p)=>'Long +'+q+' @ '+p,posShort:(q,p)=>'Short '+q+' @ '+p,
+      tabMine:'My runs',tabPlayers:'Leaderboard',clear:'clear',
+      envOnline:'· live',envLocal:'· local',envTemp:'· temp',
+      mineEmpty:'Finish a round and your rank lands here',
+      avgRank:r=>'Avg rank <b>'+r+' / 5</b>',best:(s,v)=>'Best <b class="'+(v>=0?'up':'down')+'">'+s+'</b>',
+      mineRow:(no,seed)=>'Round '+no+' · seed '+seed,
+      playersEmpty:'No one on the board yet.<br>Beat every bot (rank #1) to qualify.',
+      playersOn:n=>'<b>'+n+'</b> players',shareScope:on=>on?'shared worldwide':'saved on this device',
+      playerRow:(nm,seed)=>nm+' · seed '+seed,
+      fhead:'Your fortune',grades:['','Top Banana','Good Fortune','Even Odds','Hard Luck','Cursed'],
+      mDrift:'Drift',mDriftNote:'expected 0',mRank:'Your rank',mRankNote:'of 5',mMonkey:'vs Monkey',mMonkeyNote:'you − monkey',
+      rReady:'Hit Start. The price is a zero-drift random walk — there is <b>no signal</b> inside. You race 4 opponents (Momentum, Contrarian, Buy & Hold, and a coin-flipping monkey) on the <span class="n">same tape</span>. See if your rank can stay above pure luck.',
+      rRun0:'Use <b>B / S</b> to flip long/short in one tap. Watch your live rank on the right.',
+      rRun:(m)=>'A few trades in, mean P&L per trade <b>'+m+'</b>. Wait for the close — on zero drift this number collapses toward 0.',
+      rFirst:'You <b>took first</b> — beating Momentum, Contrarian, Buy & Hold, and the monkey. But on a zero-drift tape, first place is one lucky draw, not skill. Play more and your average rank drifts back to <span class="n">3.0 / 5</span>.',
+      rLoseMonkey:(rk,d)=>'You placed <b>#'+rk+'</b>, behind a coin-flipping monkey by '+d+'. The fancy-sounding Momentum and Contrarian hug 0 too — because there is nothing to read.',
+      rMid:rk=>'You placed <b>#'+rk+' / 5</b>. Play a dozen more and watch the average rank settle near 3 — your rank is a coin toss.',
+      rCost:(n,f)=>'You traded '+n+' times and paid <b>'+f+'</b> in fees. A zero-drift market is zero-sum; add costs and it turns <b>negative-sum</b> — the busier you are, the surer you lose.',
+      nameHolder:'your handle',upload:'Submit 🏆',share:'Share 🔗',
+      rbGrade:(g,c)=>'<span style="color:'+c+';font-weight:800">'+g+'</span>',
+      rbRank:(rk,n)=>'rank <b class="'+(rk<=2?'up':rk>=4?'down':'flat')+'">#'+rk+'/'+n+'</b>',rbSeed:s=>'seed '+s,
+      hintNotFirst:'Only rank #1 runs (beating every bot) can make the board.',
+      hintNotCanon:'The global board only takes standard rounds: vol 1% · cost 2bp · 120 ticks.',
+      upOnline:'You are on the global leaderboard 🏆',upLocal:'Saved to your local board 🏆',upReject:'After the server replay, you were not #1 — not added.',upErr:'Network error — saved locally instead.',
+      savePng:'Save image',copyLink:'Copy challenge link',copyTxt:'Copy caption',close:'Close',
+      tSaved:'Image saved',tLinkCopied:'Challenge link copied',tTxtCopied:'Caption copied',tCopyFail:'Copy failed — select manually',
+      cardSub:'An experiment about luck · zero-drift · no signal',cardFortune:'Your fortune',cardRR:'Return · Rank',cardRankN:(r,n)=>'#'+r+' of '+n,
+      cardTagFirst:'Beat Momentum · Contrarian · Buy&Hold · and a coin-flipping monkey',cardTag:'In a market with no signal, rank is a coin flip',
+      shareTxt:(gi,seed,s,rk,n,first,url)=>'I drew "'+gi+'" in Pure Random Market — seed '+seed+', '+s+', #'+rk+'/'+n+'. '+(first?'Beat Momentum, Contrarian, Buy&Hold and a coin-flipping monkey — but first place on zero drift is just luck.':'In a market with no signal, rank is a coin flip.')+' Same tape awaits you 👉 '+url,
+      title:'Pure Random Market'
+    }
+  };
+  let lang = (qp.get('lang')==='en'||qp.get('lang')==='zh') ? qp.get('lang')
+           : ((navigator.language||'zh').toLowerCase().startsWith('zh')?'zh':'en');
+  const t=(k)=>L[lang][k];
+
+  // ---------- storage (local mine + fallback board) ----------
   const hasWS=(typeof window!=='undefined'&&window.storage&&typeof window.storage.get==='function');
   let hasLS=false; try{const k='__n_t';localStorage.setItem(k,'1');localStorage.removeItem(k);hasLS=true;}catch(e){}
-  const mem={};
-  const localEnv=()=>hasWS?'online':(hasLS?'local':'session');
-  let ENV=LEADERBOARD_API?'online':localEnv();
-  async function sget(key,shared){
-    try{ if(hasWS){const r=await window.storage.get(key,!!shared);return r?r.value:null;} }catch(e){}
-    try{ if(hasLS){return localStorage.getItem(key);} }catch(e){}
-    return mem[key]||null;
-  }
-  async function sset(key,val,shared){
-    try{ if(hasWS){await window.storage.set(key,val,!!shared);return;} }catch(e){}
-    try{ if(hasLS){localStorage.setItem(key,val);return;} }catch(e){}
-    mem[key]=val;
-  }
-  const K_MINE='noise:mine',K_PLAYERS='noise:players',K_NAME='noise:name';
-  function cleanPlayers(list){
-    if(!Array.isArray(list))return [];
-    return list.filter(p=>p&&Number.isFinite(+p.ret)).map(p=>({
-      name:cleanText(p.name||'无名氏',16)||'无名氏',
-      ret:+p.ret,
-      seed:cleanText(p.seed||'',32),
-      rank:parseInt(p.rank,10)||1,
-      ts:parseInt(p.ts,10)||Date.now()
-    })).sort((a,b)=>b.ret-a.ret).slice(0,50);
-  }
-  async function fetchGlobalPlayers(){
-    if(!LEADERBOARD_API)return null;
-    try{
-      const r=await fetch(LEADERBOARD_API+'/leaderboard',{cache:'no-store'});
-      if(!r.ok)throw new Error('leaderboard unavailable');
-      const data=await r.json();
-      ENV='online';
-      return cleanPlayers(data.players);
-    }catch(e){ENV=localEnv();return null;}
-  }
-  async function postGlobalPlayer(entry){
-    if(!LEADERBOARD_API)return null;
-    try{
-      const r=await fetch(LEADERBOARD_API+'/leaderboard',{
-        method:'POST',
-        headers:{'content-type':'application/json'},
-        body:JSON.stringify(entry)
-      });
-      if(!r.ok)throw new Error('leaderboard upload failed');
-      const data=await r.json();
-      ENV='online';
-      return cleanPlayers(data.players);
-    }catch(e){ENV=localEnv();return null;}
-  }
+  const mem={}; const ENV=hasWS?'online':(hasLS?'local':'session');
+  async function sget(key,shared){try{if(hasWS){const r=await window.storage.get(key,!!shared);return r?r.value:null;}}catch(e){}try{if(hasLS){return localStorage.getItem(key);}}catch(e){}return mem[key]||null;}
+  async function sset(key,val,shared){try{if(hasWS){await window.storage.set(key,val,!!shared);return;}}catch(e){}try{if(hasLS){localStorage.setItem(key,val);return;}}catch(e){}mem[key]=val;}
+  const K_MINE='noise:mine',K_PLAYERS='noise:players',K_NAME='noise:name',K_LANG='noise:lang';
 
-  // ---------- RNG ----------
+  // ---------- deterministic core (identical to worker) ----------
   function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
   function hashSeed(s){s=String(s);let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
   let rng,monkeyRng,spare=null;
   function gauss(){if(spare!==null){const g=spare;spare=null;return g;}let u=0,v=0;while(u===0)u=rng();while(v===0)v=rng();const m=Math.sqrt(-2*Math.log(u));spare=m*Math.sin(2*Math.PI*v);return m*Math.cos(2*Math.PI*v);}
 
-  // ---------- state ----------
   const START=10000,PX=100,LB=6,BOT_SZ=5;
+  const CANON={sigma:0.01,cost:2,len:120};
   let sigma,costBps,seedStr,roundLen;
-  let price,ticks,buf,logSum,markers;
+  let price,ticks,buf,logSum,markers,actionLog;
   let accts,human;
   let phase='ready';
   let acc=0,lastT=0,size=5,speed=3;
-  let roundNo=0, mine=[], players=[], lastResult=null, boardTab='mine', appReady=false;
+  let roundNo=0, mine=[], players=[], lastResult=null, boardTab='mine';
+  let appReady=false, uploadBusy=false;
 
-  function makeAcct(id,name,glyph,human){return{id,name,glyph,human,pos:0,avg:0,real:0,fees:0,tradeRets:[],closes:0,wins:0};}
+  function makeAcct(id,glyph,human){return{id,glyph,human,pos:0,avg:0,real:0,fees:0,tradeRets:[]};}
   function exec(a,side,qty){
     if(qty<=0)return;
     if(a.pos===0||Math.sign(a.pos)===side){const t=Math.abs(a.pos)+qty;a.avg=(a.avg*Math.abs(a.pos)+price*qty)/t;a.pos+=side*qty;}
-    else{const cq=Math.min(qty,Math.abs(a.pos));const pnl=cq*(price-a.avg)*Math.sign(a.pos);a.real+=pnl;a.closes++;if(pnl>0)a.wins++;a.tradeRets.push(pnl);a.pos+=side*qty;const rem=qty-cq;if(rem>0)a.avg=price;else if(a.pos===0)a.avg=0;}
-    const f=qty*price*costBps/10000;a.real-=f;a.fees+=f;
+    else{const cq=Math.min(qty,Math.abs(a.pos));const pnl=cq*(price-a.avg)*Math.sign(a.pos);a.real+=pnl;a.tradeRets.push(pnl);a.pos+=side*qty;const rem=qty-cq;if(rem>0)a.avg=price;else if(a.pos===0)a.avg=0;}
+    a.real-=qty*price*costBps/10000; a.fees+=qty*price*costBps/10000;
     if(a.human){markers.push({t:ticks,side});if(markers.length>80)markers.shift();}
   }
-  function target(a,side,sz){const want=side*sz;const d=want-a.pos;if(d!==0)exec(a,Math.sign(d),Math.abs(d));}
+  function moveTo(a,pos){const d=pos-a.pos;if(d!==0)exec(a,Math.sign(d),Math.abs(d));}
   const equity=a=>START+a.real+a.pos*(price-a.avg);
   const retPct=a=>(equity(a)/START-1)*100;
+  const canonical=()=>Math.abs(sigma-CANON.sigma)<1e-9 && costBps===CANON.cost && roundLen===CANON.len;
 
   function loadRound(){
-    seedStr=cleanText($('cfgSeed').value,32)||'0';
+    seedStr=cleanSeed($('cfgSeed').value.trim()||'0');
     $('cfgSeed').value=seedStr;
     sigma=Math.max(0.01,parseFloat($('cfgSigma').value)||1)/100;
     costBps=Math.max(0,parseFloat($('cfgCost').value)||0);
     roundLen=Math.min(400,Math.max(30,parseInt($('cfgLen').value)||120));
-    const eff='r'+roundNo+':'+seedStr;
-    rng=mulberry32(hashSeed(eff)); monkeyRng=mulberry32(hashSeed(eff)^0x9E3779B9); spare=null;
-    price=PX; ticks=0; buf=[PX]; logSum=0; markers=[];
-    accts=[
-      makeAcct('you','你','●',true),
-      makeAcct('mom','动量','↗',false),
-      makeAcct('con','反转','↘',false),
-      makeAcct('bh','买入持有','◆',false),
-      makeAcct('monkey','猴子','🐒',false),
-    ];
+    rng=mulberry32(hashSeed(seedStr)); monkeyRng=mulberry32(hashSeed(seedStr)^0x9E3779B9); spare=null;
+    price=PX; ticks=0; buf=[PX]; logSum=0; markers=[]; actionLog=[];
+    accts=[makeAcct('you','●',true),makeAcct('mom','↗',false),makeAcct('con','↘',false),makeAcct('bh','◆',false),makeAcct('monkey','🐒',false)];
     human=accts[0]; phase='ready';
     setLong(false); setShort(false); $('resultBar').hidden=true;
     draw(); renderHUD(); renderLead(); renderVerdict(); setPrimary();
   }
-  function newRound(){roundNo++; loadRound(); startRun();}
+  function newRound(){
+    const n=parseInt(seedStr,10);
+    const nextSeed = (Number.isFinite(n)&&String(n)===seedStr) ? String(n+1) : String(hashSeed(seedStr)>>>0);
+    $('cfgSeed').value=nextSeed; roundNo++; loadRound(); startRun();
+  }
 
   function stepBots(){
     const mom=accts[1],con=accts[2],bh=accts[3],mk=accts[4];
     if(ticks>LB){const sig=Math.sign(price-buf[buf.length-1-LB]);
-      if(sig){if(Math.sign(mom.pos)!==sig)target(mom,sig,BOT_SZ);if(Math.sign(con.pos)!==-sig)target(con,-sig,BOT_SZ);}}
-    if(ticks===1)target(bh,1,BOT_SZ);
-    if(monkeyRng()<0.05){const x=monkeyRng(),s=x<0.45?1:(x<0.9?-1:0);
-      if(s===0){if(mk.pos)exec(mk,-Math.sign(mk.pos),Math.abs(mk.pos));}else target(mk,s,BOT_SZ);}
+      if(sig){if(Math.sign(mom.pos)!==sig)moveTo(mom,sig*BOT_SZ);if(Math.sign(con.pos)!==-sig)moveTo(con,-sig*BOT_SZ);}}
+    if(ticks===1)moveTo(bh,BOT_SZ);
+    if(monkeyRng()<0.05){const x=monkeyRng(),s=x<0.45?1:(x<0.9?-1:0);moveTo(mk,s*BOT_SZ);}
   }
   function tick(){const r=-0.5*sigma*sigma+sigma*gauss();price=price*Math.exp(r);logSum+=r;ticks++;buf.push(price);stepBots();if(ticks>=roundLen)finishRound();}
   function standings(){return accts.map(a=>({id:a.id,ret:retPct(a)})).sort((x,y)=>y.ret-x.ret);}
   function finishRound(){
     phase='done';
     const board=standings(),rank=board.findIndex(b=>b.id==='you')+1,ret=retPct(human);
-    lastResult={no:roundNo,seed:seedStr,ret,rank,n:board.length,qualifies:(rank===1&&ret>0),ts:Date.now()};
+    lastResult={no:roundNo,seed:seedStr,ret,rank,n:board.length,qualifies:(rank===1&&ret>0),canon:canonical(),actions:actionLog.slice(),ts:Date.now()};
     mine.unshift({no:roundNo,rank,ret,seed:seedStr,ts:lastResult.ts}); if(mine.length>60)mine.pop();
     sset(K_MINE,JSON.stringify(mine.slice(0,60)),false);
     showResultBar(); if(boardTab==='mine')renderBoard(); setPrimary();
   }
+  function logAction(){ actionLog.push({t:ticks,pos:human.pos}); }
 
   // ---------- chart ----------
   const cv=$('chart'),ctx=cv.getContext('2d');
-  function sizeCanvas(){const r=cv.getBoundingClientRect(),dpr=window.devicePixelRatio||1;cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);draw();}
+  function sizeCanvas(){const r=cv.getBoundingClientRect(),dpr=window.devicePixelRatio||1;cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);if(buf)draw();}
   function draw(){
     const W=cv.getBoundingClientRect().width,H=cv.getBoundingClientRect().height;
     ctx.clearRect(0,0,W,H);
@@ -441,19 +470,20 @@
   const money=n=>(n<0?'-$':'$')+fmt(Math.abs(n));
   const cls=n=>n>1e-9?'up':n<-1e-9?'down':'flat';
   const sgn=n=>(n>=0?'+':'');
+  const pct=n=>sgn(n)+fmt(n)+'%';
 
   function renderHUD(){
     const bh=(price/PX-1)*100,eq=equity(human),unreal=human.pos*(price-human.avg);
     $('rPrice').textContent=fmt(price);
-    const c=$('rChg');c.textContent=sgn(bh)+fmt(bh)+'%';c.className='chg '+cls(bh);
-    $('rTick').textContent=phase==='ready'?'就绪':(phase==='done'?'第 '+roundNo+' 局 · 收盘':'第 '+ticks+' / '+roundLen+' 拍');
+    const c=$('rChg');c.textContent=pct(bh);c.className='chg '+cls(bh);
+    $('rTick').textContent=phase==='ready'?t('ready'):(phase==='done'?t('done')(roundNo):t('tick')(ticks,roundLen));
     $('rProg').style.width=(ticks/roundLen*100)+'%';
     const w=Math.floor(eq);
     $('sEquity').innerHTML=(eq<0?'-$':'$')+Math.abs(w).toLocaleString()+'<span class="sm">.'+fmt(Math.abs(eq-w)).slice(2)+'</span>';
-    $('sPos').textContent=human.pos===0?'空仓':((human.pos>0?'多 +':'空 ')+human.pos+' @ '+fmt(human.avg));
+    $('sPos').textContent=human.pos===0?t('posFlat'):(human.pos>0?t('posLong')(human.pos,fmt(human.avg)):t('posShort')(human.pos,fmt(human.avg)));
     const pn=$('sPnl');pn.textContent=money(human.real+unreal);pn.className='mono '+cls(human.real+unreal);
   }
-
+  const botName=id=>t(id==='you'?'botYou':id==='mom'?'botMom':id==='con'?'botCon':id==='bh'?'botBh':'botMonkey');
   function renderLead(){
     const rows=accts.map(a=>({a,ret:retPct(a)})).sort((x,y)=>y.ret-x.ret);
     const maxAbs=Math.max(0.4,...rows.map(r=>Math.abs(r.ret)));
@@ -462,114 +492,111 @@
       const fill=pos?`left:50%;width:${w}%;background:${col}`:`right:50%;width:${w}%;background:${col}`;
       const rankCell=i<3?`<div class="coin">${i+1}</div>`:`<div class="medal">${i+1}</div>`;
       return `<div class="lrow${a.human?' you':''}">${rankCell}<div>
-        <div class="lname"><span class="who"><span class="g">${a.glyph}</span>${a.name}</span><span class="ret ${cls(r.ret)}">${sgn(r.ret)}${fmt(r.ret)}%</span></div>
+        <div class="lname"><span class="who"><span class="g">${a.glyph}</span>${botName(a.id)}</span><span class="ret ${cls(r.ret)}">${pct(r.ret)}</span></div>
         <div class="bar"><div class="mid"></div><div class="fill" style="${fill}"></div></div></div></div>`;
     }).join('');
   }
-
   function renderBoard(){
-    $('pEnv').textContent=ENV==='online'?'· 在线':(ENV==='local'?'· 本机':'· 临时');
+    $('pEnv').textContent=(apiBase)?t('envOnline'):(ENV==='online'?t('envOnline'):ENV==='local'?t('envLocal'):t('envTemp'));
     const sum=$('sSum'),log=$('sLog');
     if(boardTab==='mine'){
-      if(!mine.length){sum.innerHTML='<span>本机战绩 <b>0</b></span><span>未开局</span>';log.innerHTML='<div class="sempty">跑完一局,名次记在这儿</div>';return;}
+      if(!mine.length){sum.innerHTML='';log.innerHTML=`<div class="sempty">${t('mineEmpty')}</div>`;return;}
       const avgRank=mine.reduce((s,r)=>s+r.rank,0)/mine.length,best=Math.max(...mine.map(r=>r.ret));
-      sum.innerHTML=`<span>平均名次 <b>${avgRank.toFixed(1)} / 5</b></span><span>最佳 <b class="${cls(best)}">${sgn(best)}${fmt(best)}%</b></span>`;
-      log.innerHTML=mine.map(r=>`<div class="sitem"><span class="rk ${r.rank<=2?'up':(r.rank>=4?'down':'flat')}">#${r.rank}</span><span class="r">第${r.no}局 · 种子 ${esc(r.seed)}</span><span class="v ${cls(r.ret)}">${sgn(r.ret)}${fmt(r.ret)}%</span></div>`).join('');
+      sum.innerHTML=`<span>${t('avgRank')(avgRank.toFixed(1))}</span><span>${t('best')(pct(best),best)}</span>`;
+      log.innerHTML=mine.map(r=>`<div class="sitem"><span class="rk ${r.rank<=2?'up':(r.rank>=4?'down':'flat')}">#${r.rank}</span><span class="r">${t('mineRow')(r.no,esc(r.seed))}</span><span class="v ${cls(r.ret)}">${pct(r.ret)}</span></div>`).join('');
     }else{
-      if(!players.length){sum.innerHTML=`<span>上榜 <b>0</b> 人</span><span>${ENV==='online'?'全网共享':'本机保存'}</span>`;log.innerHTML='<div class="sempty">还没人上榜。<br>跑赢全部对手(名次 #1)才有资格。</div>';return;}
-      sum.innerHTML=`<span>上榜 <b>${players.length}</b> 人</span><span>${ENV==='online'?'全网共享':'本机保存'}</span>`;
+      if(!players.length){sum.innerHTML='';log.innerHTML=`<div class="sempty">${t('playersEmpty')}</div>`;return;}
+      sum.innerHTML=`<span>${t('playersOn')(players.length)}</span><span>${t('shareScope')(!!apiBase||ENV==='online')}</span>`;
       const myTs=lastResult&&lastResult.ts;
       log.innerHTML=players.slice(0,20).map((p,i)=>{
         const mineFlag=(p.ts===myTs)?' mine':'';
-        return `<div class="sitem${mineFlag}"><span class="rk ${i<3?'up':'flat'}">${i+1}</span><span class="r">${esc(p.name||'无名氏')} · 种子 ${esc(p.seed)}</span><span class="v ${cls(p.ret)}">${sgn(p.ret)}${fmt(p.ret)}%</span></div>`;
+        return `<div class="sitem${mineFlag}"><span class="rk ${i<3?'up':'flat'}">${i+1}</span><span class="r">${t('playerRow')(esc(p.name||'—'),esc(p.seed))}</span><span class="v ${cls(p.ret)}">${pct(p.ret)}</span></div>`;
       }).join('');
     }
   }
-
-  function gradeInfo(rank){
-    return [null,
-      {t:'上上签',c:'var(--red)'},
-      {t:'上签',c:'var(--red)'},
-      {t:'中签',c:'var(--gold-ink)'},
-      {t:'下签',c:'var(--green)'},
-      {t:'下下签',c:'var(--green)'}
-    ][rank]||{t:'—',c:'var(--muted)'};
-  }
+  function gradeInfo(rank){const g=t('grades')[rank]||'—';const c=rank<=2?'var(--red)':rank===3?'var(--gold-ink)':'var(--green)';return{t:g,c};}
   function renderVerdict(){
     const drift=ticks>0?logSum/ticks*100:0;
     const dv=$('vDrift');dv.textContent=sgn(drift)+fmt(drift,3)+'%';dv.className='val '+cls(drift);
     const board=standings(),rank=board.findIndex(b=>b.id==='you')+1;
     $('vRank').textContent='#'+rank;$('vRank').className='val '+(rank<=2?'up':rank>=4?'down':'flat');
     const monkey=accts.find(a=>a.id==='monkey'),diff=retPct(human)-retPct(monkey);
-    const mv=$('vMonkey');mv.textContent=sgn(diff)+fmt(diff)+'%';mv.className='val '+cls(diff);
-
-    const grade=$('vGrade'), rul=$('vRuling'), n=human.tradeRets.length;
-    if(phase==='ready'){
-      grade.textContent='待抽'; grade.style.color='var(--muted)';
-      rul.innerHTML='点「开始」。价格是零漂移的随机游走——里面<b>没有信号</b>。你会和 4 位对手在<span class="n">同一条行情</span>上同场竞技,看名次能不能稳定压过纯运气。';
-      return;
-    }
-    const gi=gradeInfo(rank); grade.textContent=gi.t; grade.style.color=gi.c;
+    const mv=$('vMonkey');mv.textContent=pct(diff);mv.className='val '+cls(diff);
+    const grade=$('vGrade'),rul=$('vRuling'),n=human.tradeRets.length;
+    if(phase==='ready'){grade.textContent=lang==='zh'?'待抽':'—';grade.style.color='var(--muted)';rul.innerHTML=t('rReady');return;}
+    const gi=gradeInfo(rank);grade.textContent=gi.t;grade.style.color=gi.c;
     if(phase==='done'){
       let txt;
-      if(rank===1) txt=`这一局你<b>拔了头筹</b>——赢了动量、反转、买入持有,还有那只猴子。但零漂移的行情里,冠军只是一次运气好的抽签,不是本事。多抽几签,右边的平均名次会慢慢向 <span class="n">3.0 / 5</span> 归位。`;
-      else if(diff<0) txt=`你排 <b>第 ${rank}</b>,还输给了那只抛硬币的猴子 ${fmt(-diff)}%。名头唬人的动量、反转,也一样贴着 0——因为根本没有信号可读。`;
-      else txt=`你排 <b>第 ${rank} / 5</b>。多抽十几签,看右边的平均名次:它会收在 3 附近,说明名次和抛硬币没两样。`;
-      if(human.fees>Math.abs(human.real+human.pos*(price-human.avg))*0.5 && retPct(human)<0)
-        txt=`你出手 ${n} 次,交了 <b>${money(human.fees)}</b> 的过路费。零漂移市场本是零和,加上成本就成了<b>负和</b>——手越勤,输得越稳。`;
-      rul.innerHTML=txt; return;
+      if(rank===1)txt=t('rFirst');
+      else if(diff<0)txt=t('rLoseMonkey')(rank,fmt(-diff)+'%');
+      else txt=t('rMid')(rank);
+      if(human.fees>Math.abs(human.real+human.pos*(price-human.avg))*0.5 && retPct(human)<0)txt=t('rCost')(n,money(human.fees));
+      rul.innerHTML=txt;return;
     }
-    if(n<3) rul.innerHTML='用 <b>B / S</b> 一键翻多翻空。右边盯着你和对手的实时名次。';
-    else{const mean=human.tradeRets.reduce((a,b)=>a+b,0)/n;rul.innerHTML=`已出手 ${n} 次,每笔均值 <b>${money(mean)}</b>。撑到收盘再看签——在零漂移里,这个数会往 0 塌。`;}
+    if(n<3)rul.innerHTML=t('rRun0');
+    else{const mean=human.tradeRets.reduce((a,b)=>a+b,0)/n;rul.innerHTML=t('rRun')(money(mean));}
   }
   function renderAll(){draw();renderHUD();renderLead();renderVerdict();}
 
   // ---------- result / upload ----------
   function showResultBar(){
-    const r=lastResult; if(!r)return;
-    const gi=gradeInfo(r.rank);
-    $('rbInfo').innerHTML=`<span style="color:${gi.c};font-weight:800">${gi.t}</span><span class="big ${cls(r.ret)}">${sgn(r.ret)}${fmt(r.ret)}%</span><span>名次 <b class="${r.rank<=2?'up':r.rank>=4?'down':'flat'}">#${r.rank}/${r.n}</b></span><span>种子 ${esc(r.seed)}</span>`;
-    const up=$('bUpload');
-    up.disabled=!r.qualifies;
-    up.textContent='上榜 🏆';
-    $('rbHint').textContent=r.qualifies?'':'只有跑赢全部对手(名次 #1)的成绩才有资格上榜。';
+    const r=lastResult;if(!r)return;const gi=gradeInfo(r.rank);
+    uploadBusy=false;
+    $('bUpload').textContent=t('upload');
+    $('rbInfo').innerHTML=`${t('rbGrade')(gi.t,gi.c)}<span class="big ${cls(r.ret)}">${pct(r.ret)}</span><span>${t('rbRank')(r.rank,r.n)}</span><span>${t('rbSeed')(esc(r.seed))}</span>`;
+    const canOK = apiBase ? r.canon : true;
+    $('bUpload').disabled=!(r.qualifies&&canOK);
+    $('rbHint').textContent = !r.qualifies ? t('hintNotFirst') : (apiBase&&!r.canon ? t('hintNotCanon') : '');
     $('resultBar').hidden=false;
   }
-  let uploadBusy=false;
   async function doUpload(){
-    const r=lastResult; if(uploadBusy||!r||!r.qualifies)return;
+    const r=lastResult;if(!r||!r.qualifies||uploadBusy)return;
     uploadBusy=true;
-    const up=$('bUpload');
-    up.disabled=true; up.textContent='上传中...'; $('rbHint').textContent='正在写入全网江湖榜...';
-    const name=cleanText($('rbName').value||'无名氏',16)||'无名氏';
+    $('bUpload').disabled=true;
+    $('bUpload').textContent=lang==='zh'?'上传中...':'Submitting...';
+    const name=cleanName($('rbName').value);
     $('rbName').value=name;
     sset(K_NAME,name,false);
-    let list=await postGlobalPlayer({name,ret:r.ret,seed:r.seed,rank:r.rank,ts:r.ts});
-    if(!list){
-      const raw=await sget(K_PLAYERS,true); try{list=raw?JSON.parse(raw):[];}catch(e){list=[];}
-      list=cleanPlayers(list);
-      list.push({name,ret:r.ret,seed:r.seed,rank:r.rank,ts:r.ts});
-      list=cleanPlayers(list);
-      await sset(K_PLAYERS,JSON.stringify(list),true);
+    if(apiBase && r.canon){
+      try{
+        const res=await fetch(apiBase+'/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,seed:r.seed,actions:r.actions})});
+        const d=await res.json();
+        if(d&&d.ok){players=d.board||players;afterUpload();toast(t('upOnline'));return;}
+        uploadBusy=false; showResultBar(); toast(t('upReject'));return;
+      }catch(e){ toast(t('upErr')); }
     }
-    players=list;
-    boardTab='players'; $('tabPlayers').classList.add('active'); $('tabMine').classList.remove('active'); renderBoard();
-    up.disabled=true; up.textContent='已上榜'; lastResult.qualifies=false; uploadBusy=false;
-    toast(ENV==='online'?'已登上全网江湖榜 🏆':'已存入本机江湖榜 🏆');
+    // local fallback
+    const raw=await sget(K_PLAYERS,true);let list=[];try{list=raw?JSON.parse(raw):[];}catch(e){list=[];}
+    list.push({name,ret:r.ret,seed:r.seed,ts:r.ts});list.sort((a,b)=>b.ret-a.ret);list=list.slice(0,50);
+    await sset(K_PLAYERS,JSON.stringify(list),true);players=list;afterUpload();toast(t('upLocal'));
   }
+  function afterUpload(){uploadBusy=false;boardTab='players';$('tabPlayers').classList.add('active');$('tabMine').classList.remove('active');renderBoard();$('bUpload').disabled=true;$('bUpload').textContent=lang==='zh'?'已上榜':'Submitted';if(lastResult)lastResult.qualifies=false;}
 
-  // ---------- share card ----------
+  // ---------- share ----------
+  function challengeUrl(){
+    const r=lastResult||{seed:seedStr};
+    const base=location.origin+location.pathname;
+    return `${base}?seed=${encodeURIComponent(r.seed)}&vol=${(sigma*100)}&cost=${costBps}&len=${roundLen}&lang=${lang}`;
+  }
+  function cardMonkey(g,cx,cy,s,col){g.strokeStyle=col;g.fillStyle=col;g.lineWidth=s*0.16;g.lineJoin='round';
+    g.beginPath();g.arc(cx-s*0.78,cy-s*0.05,s*0.34,0,7);g.stroke();
+    g.beginPath();g.arc(cx+s*0.78,cy-s*0.05,s*0.34,0,7);g.stroke();
+    g.beginPath();g.ellipse(cx,cy,s*0.98,s*0.9,0,0,7);g.stroke();
+    g.beginPath();g.ellipse(cx,cy+s*0.3,s*0.56,s*0.44,0,0,7);g.stroke();
+    g.beginPath();g.arc(cx-s*0.34,cy-s*0.12,s*0.11,0,7);g.fill();
+    g.beginPath();g.arc(cx+s*0.34,cy-s*0.12,s*0.11,0,7);g.fill();
+    g.beginPath();g.arc(cx-s*0.17,cy+s*0.32,s*0.07,0,7);g.fill();
+    g.beginPath();g.arc(cx+s*0.17,cy+s*0.32,s*0.07,0,7);g.fill();}
   function drawShareCard(){
     const r=lastResult||{ret:0,rank:5,n:5,seed:seedStr};
     const c=$('shareCanvas'),g=c.getContext('2d'),W=1280,H=720;
     g.fillStyle='#F3E7CE';g.fillRect(0,0,W,H);
     const grad=g.createRadialGradient(W*0.85,-40,60,W*0.85,-40,760);grad.addColorStop(0,'rgba(196,53,31,0.08)');grad.addColorStop(1,'rgba(196,53,31,0)');g.fillStyle=grad;g.fillRect(0,0,W,H);
     g.strokeStyle='#D8C39A';g.lineWidth=3;g.strokeRect(28,28,W-56,H-56);
-    // logo chip + title
-    g.save();g.translate(74,92);g.rotate(-0.05);g.fillStyle='#C4351F';roundRect(g,-6,-34,58,58,14);g.fill();g.fillStyle='#F7EDD8';g.font='800 40px "Bricolage Grotesque",sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText('噪',23,-4);g.restore();
-    g.fillStyle='#2B2016';g.textAlign='left';g.textBaseline='alphabetic';g.font='800 46px "Bricolage Grotesque",sans-serif';g.fillText('纯随机市场',150,104);
-    g.fillStyle='#8A7659';g.font='500 20px "Bricolage Grotesque",sans-serif';g.fillText('一场关于运气的实验 · 零漂移 · 没有信号',150,138);
-    // sparkline
+    // monkey chip + title
+    g.save();g.translate(84,92);g.rotate(-0.05);g.fillStyle='#C4351F';roundRect(g,-30,-34,60,60,15);g.fill();cardMonkey(g,0,-4,17,'#F7EDD8');g.restore();
+    g.fillStyle='#2B2016';g.textAlign='left';g.textBaseline='alphabetic';g.font='800 46px "Bricolage Grotesque",sans-serif';g.fillText(t('title'),150,104);
+    g.fillStyle='#8A7659';g.font='500 20px "Bricolage Grotesque",sans-serif';g.fillText(t('cardSub'),150,138);
     const px={l:74,r:74,t:196,w:W-148,h:236};
     let lo=Math.min(...buf),hi=Math.max(...buf);if(hi-lo<1e-6){hi+=1;lo-=1;}const m=(hi-lo)*0.1;lo-=m;hi+=m;
     const span=Math.max(1,buf.length-1),X=i=>px.l+i/span*px.w,Y=p=>px.t+(1-(p-lo)/(hi-lo))*px.h;
@@ -578,43 +605,41 @@
     for(let k=0;k<=4;k++){const y=px.t+k/4*px.h;g.beginPath();g.moveTo(px.l,y);g.lineTo(px.l+px.w,y);g.stroke();}
     g.strokeStyle='#3A2C1A';g.lineWidth=2.8;g.lineJoin='round';g.lineCap='round';
     g.beginPath();for(let i=0;i<buf.length;i++){const x=X(i),y=Y(buf[i]);i?g.lineTo(x,y):g.moveTo(x,y);}g.stroke();
-    // grade + numbers
-    const gi=[null,{t:'上上签',c:'#C4351F'},{t:'上签',c:'#C4351F'},{t:'中签',c:'#8F6A1B'},{t:'下签',c:'#277A55'},{t:'下下签',c:'#277A55'}][r.rank]||{t:'—',c:'#8A7659'};
-    g.textAlign='left';g.fillStyle='#8A7659';g.font='600 20px "Bricolage Grotesque",sans-serif';g.fillText('今日签文',74,494);
-    g.fillStyle=gi.c;g.font='800 74px "Bricolage Grotesque",sans-serif';g.fillText(gi.t,74,566);
+    const gi=[null,{t:t('grades')[1],c:'#C4351F'},{t:t('grades')[2],c:'#C4351F'},{t:t('grades')[3],c:'#8F6A1B'},{t:t('grades')[4],c:'#277A55'},{t:t('grades')[5],c:'#277A55'}][r.rank]||{t:'—',c:'#8A7659'};
+    g.textAlign='left';g.fillStyle='#8A7659';g.font='600 20px "Bricolage Grotesque",sans-serif';g.fillText(t('cardFortune'),74,494);
+    g.fillStyle=gi.c;g.font='800 70px "Noto Serif SC","Bricolage Grotesque",serif';g.fillText(gi.t,74,566);
     const pos=(r.ret||0)>=0,col=pos?'#C4351F':'#277A55';
-    g.textAlign='right';
-    g.fillStyle='#8A7659';g.font='600 20px "Bricolage Grotesque",sans-serif';g.fillText('收益 · 名次',W-74,494);
-    g.fillStyle=col;g.font='800 60px "Spline Sans Mono",monospace';g.fillText((pos?'+':'')+(r.ret!=null?r.ret.toFixed(2):'0.00')+'%',W-74,552);
-    g.fillStyle='#4A3B29';g.font='700 34px "Spline Sans Mono",monospace';g.fillText('第 '+(r.rank||'-')+' / '+(r.n||5)+' 名',W-74,600);
+    g.textAlign='right';g.fillStyle='#8A7659';g.font='600 20px "Bricolage Grotesque",sans-serif';g.fillText(t('cardRR'),W-74,494);
+    g.fillStyle=col;g.font='800 58px "Spline Sans Mono",monospace';g.fillText((pos?'+':'')+(r.ret!=null?r.ret.toFixed(2):'0.00')+'%',W-74,550);
+    g.fillStyle='#4A3B29';g.font='700 32px "Spline Sans Mono",monospace';g.fillText(t('cardRankN')(r.rank||'-',r.n||5),W-74,596);
     g.textAlign='left';
-    // footer
-    g.fillStyle='#4A3B29';g.font='600 24px "Bricolage Grotesque",sans-serif';
-    g.fillText(r.rank===1?'赢了动量 · 反转 · 买入持有 · 和一只抛硬币的猴子':'没有信号的市场里,名次就是抛硬币',74,632);
+    g.fillStyle='#4A3B29';g.font='600 23px "Bricolage Grotesque",sans-serif';g.fillText(r.rank===1?t('cardTagFirst'):t('cardTag'),74,632);
     g.fillStyle='#8A7659';g.font='500 17px "Spline Sans Mono",monospace';
-    g.fillText('种子 '+(r.seed||seedStr)+'   波动 '+(sigma*100).toFixed(1)+'%   '+roundLen+' 拍   @shengmm81 / Ignis',74,666);
+    g.fillText('seed '+(r.seed||seedStr)+'   vol '+(sigma*100).toFixed(1)+'%   '+roundLen+'t   @shengmm81 / Ignis',74,666);
     return c;
   }
   function roundRect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
   function openShare(){drawShareCard();$('overlay').hidden=false;}
-  function downloadPng(){try{const url=$('shareCanvas').toDataURL('image/png');const a=document.createElement('a');a.href=url;a.download='噪-'+(lastResult?lastResult.seed:'')+'.png';document.body.appendChild(a);a.click();a.remove();toast('图片已保存');}catch(e){toast('保存失败,可右键图片另存');}}
+  function downloadPng(){try{const url=$('shareCanvas').toDataURL('image/png');const a=document.createElement('a');a.href=url;a.download='noise-'+(lastResult?lastResult.seed:'')+'.png';document.body.appendChild(a);a.click();a.remove();toast(t('tSaved'));}catch(e){toast(t('tCopyFail'));}}
+  function copyLink(){doCopy(challengeUrl(),t('tLinkCopied'));}
   function shareText(){
-    const r=lastResult||{ret:0,rank:5,n:5,seed:seedStr};const gi=[null,'上上签','上签','中签','下签','下下签'][r.rank]||'';
-    return `我在「纯随机市场」抽了个${gi}:种子 ${r.seed},${sgn(r.ret)}${fmt(r.ret)}%,第 ${r.rank}/${r.n} 名。`+
-      (r.rank===1?'这局赢了动量、反转、买入持有和一只抛硬币的猴子——但零漂移里的第一名只是运气。':'没有信号的市场里,名次就是抛硬币。')+
-      ' 敢来对账吗? #对账 #预测市场';
+    const r=lastResult||{ret:0,rank:5,n:5,seed:seedStr};const gi=t('grades')[r.rank]||'';
+    return t('shareTxt')(gi,r.seed,pct(r.ret),r.rank,r.n,r.rank===1,challengeUrl());
   }
-  function copyText(){const t=shareText();if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>toast('文案已复制')).catch(()=>fallbackCopy(t));}else fallbackCopy(t);}
-  function fallbackCopy(t){const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('文案已复制');}catch(e){toast('复制失败,请手动选择');}ta.remove();}
-  let toastT=null;
-  function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),1900);}
+  function copyText(){doCopy(shareText(),t('tTxtCopied'));}
+  function doCopy(str,okMsg){
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(str).then(()=>toast(okMsg)).catch(()=>fallbackCopy(str,okMsg));}
+    else fallbackCopy(str,okMsg);
+  }
+  function fallbackCopy(str,okMsg){const ta=document.createElement('textarea');ta.value=str;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(okMsg);}catch(e){toast(t('tCopyFail'));}ta.remove();}
+  let toastT=null;function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2000);}
 
   // ---------- loop ----------
   function frame(ts){
     if(phase==='running'){
-      if(!lastT)lastT=ts; acc+=ts-lastT; lastT=ts;
+      if(!lastT)lastT=ts;acc+=ts-lastT;lastT=ts;
       const interval=Math.round(680*Math.pow(0.79,speed-1));
-      let did=false; while(acc>=interval&&phase==='running'){tick();acc-=interval;did=true;}
+      let did=false;while(acc>=interval&&phase==='running'){tick();acc-=interval;did=true;}
       if(did)renderAll();
     }else lastT=0;
     requestAnimationFrame(frame);
@@ -624,51 +649,73 @@
   function setLong(on){$('bLong').classList.toggle('on',on);}
   function setShort(on){$('bShort').classList.toggle('on',on);}
   function refreshTradeBtns(){setLong(human.pos>0);setShort(human.pos<0);}
-  function doLong(){if(!appReady)return;if(phase==='ready')startRun();if(phase!=='done'){target(human,1,size);refreshTradeBtns();renderAll();}}
-  function doShort(){if(!appReady)return;if(phase==='ready')startRun();if(phase!=='done'){target(human,-1,size);refreshTradeBtns();renderAll();}}
-  function doFlat(){if(!appReady)return;if(phase!=='done'){if(human.pos!==0)exec(human,-Math.sign(human.pos),Math.abs(human.pos));refreshTradeBtns();renderAll();}}
-  function setPrimary(){const b=$('bPrimary');b.classList.toggle('run',phase==='running');
-    b.textContent=phase==='ready'?'开始 ▶':phase==='running'?'暂停 ⏸':phase==='paused'?'继续 ▶':'再来一局 ↻';}
+  function doLong(){if(!appReady)return;if(phase==='ready')startRun();if(phase!=='done'){moveTo(human,1*size);logAction();refreshTradeBtns();renderAll();}}
+  function doShort(){if(!appReady)return;if(phase==='ready')startRun();if(phase!=='done'){moveTo(human,-1*size);logAction();refreshTradeBtns();renderAll();}}
+  function doFlat(){if(!appReady)return;if(phase!=='done'){if(human.pos!==0){moveTo(human,0);logAction();}refreshTradeBtns();renderAll();}}
+  function setPrimary(){const b=$('bPrimary');b.classList.toggle('run',phase==='running');b.textContent=phase==='ready'?t('start'):phase==='running'?t('pause'):phase==='paused'?t('resume'):t('next');}
   function startRun(){if(!appReady)return;phase='running';lastT=0;setPrimary();}
   function primaryClick(){if(!appReady)return;if(phase==='ready')startRun();else if(phase==='running'){phase='paused';setPrimary();renderAll();}else if(phase==='paused')startRun();else newRound();}
   function setSize(v){size=Math.min(50,Math.max(1,v));$('szVal').textContent=size;}
-  function switchTab(t){boardTab=t;$('tabMine').classList.toggle('active',t==='mine');$('tabPlayers').classList.toggle('active',t==='players');renderBoard();}
+  function switchTab(x){boardTab=x;$('tabMine').classList.toggle('active',x==='mine');$('tabPlayers').classList.toggle('active',x==='players');renderBoard();}
+
+  // ---------- static i18n ----------
+  function applyStatic(){
+    document.documentElement.lang=lang;
+    $('brandTitle').textContent=t('title'); $('brandSub').textContent=t('sub');
+    $('lblSeed').textContent=t('seed');$('lblVol').textContent=t('vol');$('lblCost').textContent=t('cost');$('lblLen').textContent=t('len');
+    $('bLong').innerHTML=t('long')+'<span class="k">B</span>'; $('bShort').innerHTML=t('short')+'<span class="k">S</span>';
+    $('bFlat').textContent=t('flat'); $('szLab').textContent=t('sizeLab'); $('speedLab').textContent=t('speed');
+    $('leadHead').textContent=t('leadHead');
+    $('tabMine').textContent=t('tabMine');
+    $('tabPlayers').firstChild.textContent=t('tabPlayers'); // keep env span
+    $('bClear').textContent=t('clear');
+    $('rbName').placeholder=t('nameHolder'); $('bUpload').textContent=t('upload'); $('bShare').textContent=t('share');
+    $('fhead').textContent=t('fhead');
+    $('mDrift').textContent=t('mDrift');$('mDriftNote').textContent=t('mDriftNote');
+    $('mRank').textContent=t('mRank');$('mRankNote').textContent=t('mRankNote');
+    $('mMonkey').textContent=t('mMonkey');$('vMonkeyNote').textContent=t('mMonkeyNote');
+    $('dlPng').textContent=t('savePng');$('copyLink').textContent=t('copyLink');$('copyTxt').textContent=t('copyTxt');$('closeShare').textContent=t('close');
+    $('langZh').classList.toggle('on',lang==='zh');$('langEn').classList.toggle('on',lang==='en');
+  }
+  function setLang(x){lang=x;sset(K_LANG,x,false);applyStatic();if(!appReady)return;renderHUD();renderLead();renderVerdict();renderBoard();setPrimary();if(!$('resultBar').hidden&&lastResult)showResultBar();}
 
   $('bPrimary').onclick=primaryClick;
-  $('bLong').onclick=doLong; $('bShort').onclick=doShort; $('bFlat').onclick=doFlat;
-  $('szUp').onclick=()=>setSize(size+1); $('szDown').onclick=()=>setSize(size-1);
+  $('bLong').onclick=doLong;$('bShort').onclick=doShort;$('bFlat').onclick=doFlat;
+  $('szUp').onclick=()=>setSize(size+1);$('szDown').onclick=()=>setSize(size-1);
   $('tSpeed').oninput=e=>{speed=+e.target.value;$('svVal').textContent=speed;};
-  $('tabMine').onclick=()=>switchTab('mine'); $('tabPlayers').onclick=()=>switchTab('players');
-  $('bClear').onclick=async()=>{
-    if(boardTab==='mine'){mine=[];await sset(K_MINE,'[]',false);}
-    else if(ENV==='online'){toast('全网江湖榜不能在前端清空');return;}
-    else{players=[];await sset(K_PLAYERS,'[]',true);}
-    renderBoard();
-  };
-  $('bUpload').onclick=doUpload; $('bShare').onclick=openShare;
-  $('dlPng').onclick=downloadPng; $('copyTxt').onclick=copyText;
+  $('tabMine').onclick=()=>switchTab('mine');$('tabPlayers').onclick=()=>switchTab('players');
+  $('bClear').onclick=async()=>{if(boardTab==='mine'){mine=[];await sset(K_MINE,'[]',false);}else if(apiBase){toast(lang==='zh'?'全网江湖榜不能在前端清空':'The global board cannot be cleared here');return;}else{players=[];await sset(K_PLAYERS,'[]',true);}renderBoard();};
+  $('bUpload').onclick=doUpload;$('bShare').onclick=openShare;
+  $('dlPng').onclick=downloadPng;$('copyLink').onclick=copyLink;$('copyTxt').onclick=copyText;
   $('closeShare').onclick=()=>{$('overlay').hidden=true;};
   $('overlay').onclick=e=>{if(e.target===$('overlay'))$('overlay').hidden=true;};
+  $('langZh').onclick=()=>setLang('zh');$('langEn').onclick=()=>setLang('en');
   ['cfgSeed','cfgSigma','cfgCost','cfgLen'].forEach(id=>$(id).addEventListener('change',()=>{roundNo=0;loadRound();}));
   document.addEventListener('keydown',e=>{
-    if(e.target.tagName==='INPUT')return;
-    const k=e.key.toLowerCase();
+    if(e.target.tagName==='INPUT')return;const k=e.key.toLowerCase();
     if(k==='b')doLong();else if(k==='s')doShort();else if(k==='f')doFlat();
     else if(k==='escape')$('overlay').hidden=true;
     else if(e.code==='Space'){e.preventDefault();primaryClick();}
   });
   window.addEventListener('resize',sizeCanvas);
 
+  async function loadPlayers(){
+    if(apiBase){try{const res=await fetch(apiBase+'/leaderboard');const d=await res.json();if(d&&d.ok)players=d.board||[];}catch(e){players=[];}}
+    else{try{const rp=await sget(K_PLAYERS,true);if(rp)players=JSON.parse(rp)||[];}catch(e){players=[];}}
+  }
   async function init(){
+    // challenge-link params
+    if(qp.get('seed'))$('cfgSeed').value=qp.get('seed');
+    if(qp.get('vol'))$('cfgSigma').value=qp.get('vol');
+    if(qp.get('cost'))$('cfgCost').value=qp.get('cost');
+    if(qp.get('len'))$('cfgLen').value=qp.get('len');
+    try{const sl=await sget(K_LANG,false);if((sl==='zh'||sl==='en')&&!qp.get('lang'))lang=sl;}catch(e){}
     try{const rn=await sget(K_NAME,false);if(rn)$('rbName').value=rn;}catch(e){}
     try{const rm=await sget(K_MINE,false);if(rm)mine=JSON.parse(rm)||[];}catch(e){mine=[];}
-    try{const rp=await sget(K_PLAYERS,true);if(rp)players=cleanPlayers(JSON.parse(rp)||[]);}catch(e){players=[];}
-    loadRound(); sizeCanvas(); renderBoard();
+    applyStatic(); loadRound(); sizeCanvas(); renderBoard();
     appReady=true; $('bPrimary').disabled=false;
     requestAnimationFrame(frame);
-    const gp=await fetchGlobalPlayers();
-    if(gp){players=gp;renderBoard();}
-    else renderBoard();
+    await loadPlayers(); renderBoard();
   }
   init();
 })();
